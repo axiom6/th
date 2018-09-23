@@ -1,0 +1,115 @@
+
+.study-font{ font-family:Roberto, sans-serif; }
+
+.study-all     { position:relative;  left: 5%; top:  0; width:90%;height:100%; display:block; font-size:2.0vmin; }
+.study-prac    { position:absolute;  left:33%; top:33%; width:33%; height:33%; border-radius:24px; overflow:hidden; display:table; text-align:center; }
+.study-west    { position:absolute;  left: 0;  top:33%; width:33%; height:33%; border-radius:24px; overflow:hidden; display:table; text-align:center; }
+.study-east    { position:absolute;  left:66%; top:33%; width:33%; height:33%; border-radius:24px; overflow:hidden; display:table; text-align:center; }
+.study-north   { position:absolute;  left:33%; top: 0;  width:33%; height:33%; border-radius:24px; overflow:hidden; display:table; text-align:center; }
+.study-south   { position:absolute;  left:33%; top:66%; width:33%; height:33%; border-radius:24px; overflow:hidden; display:table; text-align:center; }
+.study-southd  { position:absolute;  left:25%; top:70%; width:50%; height:28%; border-radius:24px; overflow:hidden; display:table; text-align:center; }
+.study-nw      { position:absolute;  left: 0;  top: 0;  width:33%; height:33%; border-radius:24px; overflow:hidden; display:table; text-align:center; }
+.study-ne      { position:absolute;  left:66%; top: 0;  width:33%; height:33%; border-radius:24px; overflow:hidden; display:table; text-align:center; }
+.study-sw      { position:absolute;  left:  0; top:66%; width:33%; height:28%; border-radius:24px; overflow:hidden; display:table; text-align:center; }
+.study-se      { position:absolute;  left:66%; top:66%; width:33%; height:33%; border-radius:24px; overflow:hidden; display:table; text-align:center; }
+
+.pract-bloc    { display:table-cell; vertical-align:middle;  .study-font; }
+.pract-icon    { text-align:center;  font-size:3.0vh; }
+.pract-text    { text-align:center;  font-size:3.0vh; font-weight:bold; }
+
+.study-wrap    {} // Replace by core with view pane stud grid
+.study-core    { display:table-cell; vertical-align:middle; color:black; font-weight:bold; position:relative; .study-font; }
+.topic-ul-core { list-style:none; margin:0; line-height:0.8; text-align:left; }
+.topic-li-core { list-style:none; margin:0; line-height:0.8; text-align:left; }
+.items-ul-core { list-style:none; margin:0; padding-left:1em; line-height:0.6; }
+.items-li-core { list-style:none; }
+.items-icon    { text-align:left; display:inline; }
+.items-text    { text-align:left; display:inline; padding-left:0.0em; }
+
+.study-view  { .study-core; text-align:center;
+  .study-bloc  { text-align:center; font-size:2.0vh; padding-left:0.9vh; .study-font; }
+  .study-icon  { text-align:center; font-size:2.0vh; padding-left:0.6vh; }
+  .study-text  { text-align:center; font-size:2.0vh; line-height:1.0;    }
+  .topic-ul-nw { .topic-ul-core;    font-size:1.5vh; padding-left:2.0vh; }
+  .topic-ul-sw { .topic-ul-core;    font-size:1.5vh; padding-left:2.0vh; }
+  .topic-ul-ne { .topic-ul-core;    font-size:1.5vh; padding-left:2.0vh; }
+  .topic-ul-se { .topic-ul-core;    font-size:1.5vh; padding-left:2.0vh; }
+  .topic-li    { .topic-li-core;    font-size:1.5vh; padding-top:0;      }
+  .topic-icon  { text-align:center; font-size:1.5vh; padding-left:0.6vh; }
+  .topic-text  { text-align:center; font-size:1.5vh; line-height:1.0;    }
+  .topic-img   { display:none; }
+  .items-ul    { .items-ul-core;    font-size:1.1vh; }
+  .items-li    { .items-li-core;    font-size:1.1vh; }
+  .items-icon  { text-align:center; font-size:2.0vh; padding-left:0.6vh; }
+  .items-text  { text-align:center; font-size:2.0vh; line-height:1.0;    } }
+
+.study-pane  { .study-core; text-align:left;
+  .study-bloc  { text-align:center; font-size:4.0vh; position:absolute; left:  0; top:  0; width:100%; height:12%; }
+  .study-icon  { text-align:left;   font-size:3.0vh; }
+  .study-text  { text-align:left;   font-size:3.0vh; }
+  .topic-ul-nw { .topic-ul-core;    font-size:2.5vh; position:absolute; left: 5%; top:12%; width: 40%; height:44%; padding-left:0; }
+  .topic-ul-sw { .topic-ul-core;    font-size:2.5vh; position:absolute; left: 5%; top:56%; width: 40%; height:44%; padding-left:0; }
+  .topic-ul-ne { .topic-ul-core;    font-size:2.5vh; position:absolute; left:50%; top:12%; width: 40%; height:44%; padding-left:0; }
+  .topic-ul-se { .topic-ul-core;    font-size:2.5vh; position:absolute; left:50%; top:56%; width: 40%; height:44%; padding-left:0; }
+  .topic-li    { .topic-li-core;    font-size:2.5vh; padding-top:0.8vh;    }
+  .topic-icon  { text-align:center; font-size:2.5vh; padding-left:0.6vh; }
+  .topic-text  { text-align:center; font-size:2.5vh; line-height:1.0;   }
+  .topic-img   { display:block;     font-size:2.0vh; max-height:7.5vh; max-width:10vw; padding-top:1.0vh; margin:auto; }
+  .items-ul    { .items-ul-core;    font-size:1.5vh; }
+  .items-li    { .items-li-core;    font-size:1.1vh; }
+  .items-icon  { text-align:center; font-size:2.0vh; padding-left:0.6vh; }
+  .items-text  { text-align:center; font-size:2.0vh; line-height:1.0;   } }
+
+.study-stud    { .study-core; text-align:left;
+  .study-bloc  { text-align:center; font-size:6.0vh; position:absolute; left:  0; top: 2%; width:100%; height:10%; }
+  .study-icon  { text-align:left;   font-size:6.0vh; }
+  .study-text  { text-align:left;   font-size:6.0vh; }
+  .topic-ul-nw { .topic-ul-core;    font-size:6.0vh; position:absolute; left: 5%; top:12%; width: 40%; height:44%; padding-left:0; }
+  .topic-ul-sw { .topic-ul-core;    font-size:6.0vh; position:absolute; left: 5%; top:56%; width: 40%; height:44%; padding-left:0; }
+  .topic-ul-ne { .topic-ul-core;    font-size:6.0vh; position:absolute; left:50%; top:12%; width: 40%; height:44%; padding-left:0; }
+  .topic-ul-se { .topic-ul-core;    font-size:6.0vh; position:absolute; left:50%; top:56%; width: 40%; height:44%; padding-left:0; }
+  .topic-li    { .topic-li-core;    font-size:4.0vh; list-style-type:none; padding-top:0.8vh;   }
+  .topic-icon  { text-align:center; font-size:4.0vh; padding-left:0.6vh; }
+  .topic-text  { text-align:center; font-size:4.0vh; line-height:1.0;   }
+  .topic-img   { display:block;     font-size:2.0vh; max-height:25.0vh; max-width:20vw; padding-top:3.0vh; }
+  .items-ul    { .items-ul-core;    font-size:3.0vh; }
+  .items-li    { .items-li-core;    font-size:3.0vh; }
+  .items-icon  { text-align:center; font-size:3.0vh; padding-left:0.6vh; }
+  .items-text  { text-align:center; font-size:3.0vh; line-height:1.0;   } }
+
+.study-grid-core   { display:grid; color:black; font-weight:bold; .study-font; width:100%; height:100%;
+  grid-template-columns:50% 50%; grid-template-rows:350px 350px; grid-template-areas:"nw ne" "sw se";
+  justify-items:start; align-content:stretch; }
+
+.study-grid    { .study-grid-core;
+  .study-bloc  {}
+  .study-icon  { text-align:left;   font-size:3.0vh; }
+  .study-text  { text-align:left;   font-size:3.0vh; }
+  .topin-ul-nw { .topic-ul-core;    font-size:3.6vh; grid-area:nw;  }
+  .topin-ul-sw { .topic-ul-core;    font-size:3.6vh;  grid-area:sw;}
+  .topin-ul-ne { .topic-ul-core;    font-size:3.6vh; grid-area:ne; }
+  .topin-ul-se { .topic-ul-core;    font-size:3.6vh; grid-area:se;  }
+  .topin-li    { padding-top:0.8vh; font-size:5.0vh; }
+  .topic-icon  { text-align:center; font-size:2.0vh; padding-left:0.6vh; }
+  .topic-text  { text-align:center; font-size:2.0vh; line-height:1.0;   }
+  .topin-img   { display:block;     font-size:2.0vh; max-height:25.0vh; max-width:20vw; padding-top:3.0vh; }
+  .items-ul    { .items-ul-core;    font-size:1.5vh; }
+  .items-li    { .items-li-core;    font-size:1.1vh; }
+  .items-icon  { text-align:center; font-size:2.0vh; padding-left:0.6vh; }
+  .items-text  { text-align:center; font-size:2.0vh; line-height:1.0;   } }
+
+@arrow-west :hsl(195,90%,70%);
+@arrow-north:hsl( 90,90%,90%);
+@arrow-east :hsl( 20,50%,90%);
+@arrow-south:hsl( 60,90%,90%);
+@arrow-back :hsl(  0, 0%,50%);
+
+.arrow       { position:absolute;  left: 5%; top:12%; width:90%; height:83%; }
+.arrow-west  { position:absolute;  left: 0;  top:33%; width:33%; height:33%; background-color:@arrow-west;  }
+.arrow-north { position:absolute;  left:33%; top: 0;  width:33%; height:33%; background-color:@arrow-north; }
+.arrow-east  { position:absolute;  left:66%; top:33%; width:33%; height:33%; background-color:@arrow-east;  }
+.arrow-south { position:absolute;  left:33%; top:66%; width:33%; height:33%; background-color:@arrow-south; }
+.arrow-prev  { position:absolute;  left:33%; top:33%; width:33%; height:33%; background-color:@arrow-back;  }
+.arrow-next  { position:absolute;  left:33%; top:33%; width:33%; height:33%; background-color:@arrow-back;  }
+
+.arrow > div > ul { padding:0 0 0 20px; margin:0; }

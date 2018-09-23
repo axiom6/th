@@ -1,0 +1,46 @@
+{
+  "name": "Principles", "angle":0,
+  "children": [
+    { "name": "Composition", "angle":0,
+      "children": [
+        { "name": "Class" },
+        { "name": "Type"  },
+        { "name": "Meta"  },
+        { "name": "Construction"  },
+        { "name": "Dependency" }  ] },
+    { "name": "Preservation", "angle":0,
+      "children": [
+        { "name": "Scope"  },
+        { "name": "Build"  },
+        {"name": "State"},
+        {"name": "Test"},
+        {"name": "Defense"} ] },
+    { "name": "Transformation", "angle":0,
+      "children": [
+        {"name": "Representation"},
+        {"name": "Pattern"},
+        {"name": "Traversal"},
+        {"name": "Higher Order"},
+        {"name": "Monads"} ] },
+    { "name": "Expression", "angle":180,
+      "children": [
+        {"name": "Convention"},
+        {"name": "Continuity"},
+        {"name": "DSLs"},
+        {"name": "Adaption"},
+        {"name": "Comprehension"} ] },
+    { "name": "Orchestration", "angle":180,
+      "children": [
+        {"name": "Polymorphic"},
+        {"name": "MVC" },
+        {"name": "AOP"  },
+        {"name": "Distributed"},
+        {"name": "Parallelism"} ] },
+    { "name": "Idioms", "angle":180,
+      "children": [
+        {"name": "Semantic"},
+        {"name": "Logic"},
+        {"name": "Linguistic"},
+        {"name": "Practice"},
+        {"name": "Standard"} ] }
+  ] }

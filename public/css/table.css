@@ -1,0 +1,166 @@
+/*
+.contrast (@color) when (luma(@color) >= @luma-upper-break) {
+  //darker text for lighter backgrounds
+  color:average(darken(@color,30%),#222); }
+*/
+.mixin-clearfix:before,
+.mixin-clearfix:after {
+  display: table;
+  content: "";
+}
+.mixin-clearfix:after {
+  clear: both;
+}
+.mixin-hover {
+  cursor: pointer;
+  background: #240f1a;
+  color: #f7edf2;
+  border-radius: 8px;
+}
+.mixin-hover-tocs {
+  cursor: pointer;
+  background: #240f1a;
+  color: #f7edf2;
+}
+.mixin-border {
+  border: black solid 1px;
+}
+.mixin-border-left-top-right {
+  border-left: solid black 1px;
+  border-top: solid black 1px;
+  border-right: solid black 1px;
+  border-bottom: none;
+}
+.mixin-border-left-right-bottom {
+  border-left: solid black 1px;
+  border-top: none;
+  border-right: solid black 1px;
+  border-bottom: solid black 1px;
+}
+.mixin-border-left-top-bottom {
+  border-left: solid black 1px;
+  border-top: solid black 1px;
+  border-right: none;
+  border-bottom: solid black 1px;
+}
+.mixin-border-top-right-bottom {
+  border-left: none;
+  border-top: solid black 1px;
+  border-right: solid black 1px;
+  border-bottom: solid black 1px;
+}
+.mixin-shadow-none {
+  box-shadow: none;
+}
+.mixin-display-table {
+  display: table;
+}
+.mixin-vertical-top {
+  display: table-cell !important;
+  vertical-align: top;
+}
+.mixin-vertical-middle {
+  display: table-cell !important;
+  vertical-align: middle;
+}
+.mixin-vertical-bottom {
+  display: table-cell !important;
+  vertical-align: bottom;
+}
+.table-table {
+  font-family: Arial, Helvetica, sans-serif;
+  border-collapse: collapse;
+  margin-left: 12px;
+  margin-top: 12px;
+  color: white;
+}
+.table-tr-obj {
+  display: none;
+}
+.table-th {
+  padding-left: 1ex;
+  padding-right: 1ex;
+}
+.table-th > i {
+  float: right;
+}
+#PAGER {
+  min-width: 4em;
+}
+.table-th-page-num {
+  min-width: 4em;
+  font-size: 0.75em;
+}
+.table-th-page-beg {
+  background: #301c1c;
+  text-align: right;
+  min-width: 1.2em;
+}
+.table-th-page-to {
+  background: #301c1c;
+  text-align: center;
+  min-width: 0.2em;
+}
+.table-th-page-end {
+  background: #301c1c;
+  text-align: right;
+  min-width: 1.2em;
+}
+.table-th-page-over {
+  background: #301c1c;
+  text-align: center;
+  min-width: 0.2em;
+}
+.table-th-page-tot {
+  background: #301c1c;
+  text-align: right;
+  min-width: 1.2em;
+}
+.table-td {
+  padding-left: 1ex;
+  padding-right: 1ex;
+}
+.table-tr-load {
+  min-width: 4em;
+  background: #613838;
+}
+.table-tr-group {
+  background: #814b4b;
+}
+.table-th-filter {
+  padding: 1ex;
+}
+.table-div-filter {
+  width: 100%;
+  overflow: hidden;
+}
+.table-input-filter {
+  width: 90%;
+  height: 1.5em;
+  background: #dabebe;
+  border-radius: 8px;
+}
+.table-even {
+  background: #412525;
+}
+.table-odds {
+  background: #301c1c;
+}
+.table-thead {
+  background: #301c1c;
+}
+.table-tfoot {
+  background: #412525;
+}
+.table-icon-unsort {
+  margin-left: 4px;
+  background-position: -192px -24px;
+}
+.table-icon-ascend {
+  margin-left: 4px;
+  background-position: -288px -144px;
+}
+.table-icon-decend {
+  margin-left: 4px;
+  background-position: -312px -144px;
+}

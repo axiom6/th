@@ -1,0 +1,7 @@
+[
+  { "name":"Methodology", "name2s":["Enterprise","Architecture"], "color":"rgb(250,180,167)", "beg":0,   "end":60  },
+  { "name":"Process",     "name2s":["Agile",     "Development"],  "color":"rgb(180,210,185)", "beg":60,  "end":120 },
+  { "name":"Deploy",      "name2s":["Build",     "Test"],         "color":"rgb(240,180,120)", "beg":120, "end":180 },
+  { "name":"Tools",       "name2s":["Language",  "Web"],          "color":"rgb(208,245,171)", "beg":180, "end":240 },
+  { "name":"Network",     "name2s":["Platform",  "Integration"],  "color":"rgb(245,232,189)", "beg":240, "end":300 },
+  { "name":"Data",        "name2s":["Database",  "Semantic"],     "color":"rgb(250,200,167)", "beg":300, "end":360 } ]

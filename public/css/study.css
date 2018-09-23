@@ -1,0 +1,686 @@
+.study-font {
+  font-family: Roberto, sans-serif;
+}
+.study-all {
+  position: relative;
+  left: 5%;
+  top: 0;
+  width: 90%;
+  height: 100%;
+  display: block;
+  font-size: 2.0vmin;
+}
+.study-prac {
+  position: absolute;
+  left: 33%;
+  top: 33%;
+  width: 33%;
+  height: 33%;
+  border-radius: 24px;
+  overflow: hidden;
+  display: table;
+  text-align: center;
+}
+.study-west {
+  position: absolute;
+  left: 0;
+  top: 33%;
+  width: 33%;
+  height: 33%;
+  border-radius: 24px;
+  overflow: hidden;
+  display: table;
+  text-align: center;
+}
+.study-east {
+  position: absolute;
+  left: 66%;
+  top: 33%;
+  width: 33%;
+  height: 33%;
+  border-radius: 24px;
+  overflow: hidden;
+  display: table;
+  text-align: center;
+}
+.study-north {
+  position: absolute;
+  left: 33%;
+  top: 0;
+  width: 33%;
+  height: 33%;
+  border-radius: 24px;
+  overflow: hidden;
+  display: table;
+  text-align: center;
+}
+.study-south {
+  position: absolute;
+  left: 33%;
+  top: 66%;
+  width: 33%;
+  height: 33%;
+  border-radius: 24px;
+  overflow: hidden;
+  display: table;
+  text-align: center;
+}
+.study-southd {
+  position: absolute;
+  left: 25%;
+  top: 70%;
+  width: 50%;
+  height: 28%;
+  border-radius: 24px;
+  overflow: hidden;
+  display: table;
+  text-align: center;
+}
+.study-nw {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 33%;
+  height: 33%;
+  border-radius: 24px;
+  overflow: hidden;
+  display: table;
+  text-align: center;
+}
+.study-ne {
+  position: absolute;
+  left: 66%;
+  top: 0;
+  width: 33%;
+  height: 33%;
+  border-radius: 24px;
+  overflow: hidden;
+  display: table;
+  text-align: center;
+}
+.study-sw {
+  position: absolute;
+  left: 0;
+  top: 66%;
+  width: 33%;
+  height: 28%;
+  border-radius: 24px;
+  overflow: hidden;
+  display: table;
+  text-align: center;
+}
+.study-se {
+  position: absolute;
+  left: 66%;
+  top: 66%;
+  width: 33%;
+  height: 33%;
+  border-radius: 24px;
+  overflow: hidden;
+  display: table;
+  text-align: center;
+}
+.study-core {
+  display: table-cell;
+  vertical-align: middle;
+  text-align: left;
+  color: black;
+  font-weight: bold;
+  position: relative;
+  font-family: Roberto, sans-serif;
+}
+.topic-ul-core {
+  list-style: none;
+  margin: 0;
+  padding-left: 1em;
+  line-height: 0.8;
+  text-align: left;
+}
+.topic-li-core {
+  list-style: none;
+  margin: 0;
+  padding-left: 1em;
+  line-height: 0.8;
+  text-align: left;
+}
+.items-ul-core {
+  list-style: none;
+  margin: 0;
+  padding-left: 1em;
+  line-height: 0.6;
+}
+.items-li-core {
+  list-style: none;
+}
+.items-icon {
+  text-align: left;
+  display: inline;
+}
+.items-text {
+  text-align: left;
+  display: inline;
+  padding-left: 0.0em;
+}
+.study-center {
+  display: table-cell;
+  vertical-align: middle;
+  text-align: center;
+  color: black;
+  font-weight: bold;
+  font-family: Roberto, sans-serif;
+}
+.study-left {
+  display: table-cell;
+  vertical-align: middle;
+  text-align: left;
+  color: black;
+  font-size: 0.9em;
+  position: relative;
+}
+.study-ul {
+  list-style: none;
+  margin-left: 0.1em;
+  line-height: 1.2;
+  margin-top: 0;
+}
+.study-icon2 {
+  text-align: left;
+  display: inline;
+  font-size: 120%;
+}
+.study-text2 {
+  text-align: left;
+  display: inline;
+  padding-left: 0.3em;
+  font-size: 120%;
+  line-height: 1.0;
+}
+.topic-ul {
+  list-style: none;
+  margin-left: 0.0em;
+  line-height: 1.2;
+  margin-top: 0;
+}
+.topic-icon {
+  text-align: left;
+  display: inline;
+}
+.topic-text {
+  text-align: left;
+  display: inline;
+  padding-left: 0;
+}
+.topin-lib {
+  font-weight: 900;
+  font-size: 1.2em;
+}
+.topin-icon {
+  text-align: left;
+  display: inline;
+}
+.topin-text {
+  text-align: left;
+  display: inline;
+  padding-left: 0;
+}
+.study-view {
+  display: table-cell;
+  vertical-align: middle;
+  text-align: left;
+  color: black;
+  font-weight: bold;
+  position: relative;
+  font-family: Roberto, sans-serif;
+  text-align: center;
+}
+.study-view .study-icon {
+  text-align: center;
+  font-size: 2.0vh;
+  padding-left: 0.6vh;
+}
+.study-view .study-text {
+  text-align: center;
+  font-size: 2.0vh;
+  line-height: 1.0;
+}
+.study-view .topic-ul-nw {
+  list-style: none;
+  margin: 0;
+  padding-left: 1em;
+  line-height: 0.8;
+  text-align: left;
+  font-size: 1.2vh;
+}
+.study-view .topic-ul-sw {
+  list-style: none;
+  margin: 0;
+  padding-left: 1em;
+  line-height: 0.8;
+  text-align: left;
+  font-size: 1.2vh;
+}
+.study-view .topic-ul-ne {
+  list-style: none;
+  margin: 0;
+  padding-left: 1em;
+  line-height: 0.8;
+  text-align: left;
+  font-size: 1.2vh;
+}
+.study-view .topic-ul-se {
+  list-style: none;
+  margin: 0;
+  padding-left: 1em;
+  line-height: 0.8;
+  text-align: left;
+  font-size: 1.2vh;
+}
+.study-view .topic-li {
+  list-style: none;
+  margin: 0;
+  padding-left: 1em;
+  line-height: 0.8;
+  text-align: left;
+  font-size: 1.2vh;
+  padding-top: 0;
+}
+.study-view .topic-icon {
+  text-align: center;
+  font-size: 2.0vh;
+  padding-left: 0.6vh;
+}
+.study-view .topic-text {
+  text-align: center;
+  font-size: 2.0vh;
+  line-height: 1.0;
+}
+.study-view .topin-img {
+  display: none;
+}
+.study-view .items-ul {
+  list-style: none;
+  margin: 0;
+  padding-left: 1em;
+  line-height: 0.6;
+  font-size: 1.1vh;
+}
+.study-view .items-li {
+  list-style: none;
+  font-size: 1.1vh;
+}
+.study-view .items-icon {
+  text-align: center;
+  font-size: 2.0vh;
+  padding-left: 0.6vh;
+}
+.study-view .items-text {
+  text-align: center;
+  font-size: 2.0vh;
+  line-height: 1.0;
+}
+.study-pane {
+  display: table-cell;
+  vertical-align: middle;
+  text-align: left;
+  color: black;
+  font-weight: bold;
+  position: relative;
+  font-family: Roberto, sans-serif;
+}
+.study-pane .study-icon {
+  text-align: left;
+  font-size: 3.0vh;
+  position: absolute;
+  left: 27%;
+  top: 2%;
+  width: 5%;
+  height: 8%;
+}
+.study-pane .study-text {
+  text-align: left;
+  font-size: 3.0vh;
+  position: absolute;
+  left: 36%;
+  top: 2%;
+  width: 50%;
+  height: 8%;
+}
+.study-pane .topic-ul-nw {
+  list-style: none;
+  margin: 0;
+  padding-left: 1em;
+  line-height: 0.8;
+  text-align: left;
+  font-size: 2.2vh;
+  position: absolute;
+  left: 5%;
+  top: 12%;
+  width: 40%;
+  height: 44%;
+}
+.study-pane .topic-ul-sw {
+  list-style: none;
+  margin: 0;
+  padding-left: 1em;
+  line-height: 0.8;
+  text-align: left;
+  font-size: 2.2vh;
+  position: absolute;
+  left: 5%;
+  top: 56%;
+  width: 40%;
+  height: 44%;
+}
+.study-pane .topic-ul-ne {
+  list-style: none;
+  margin: 0;
+  padding-left: 1em;
+  line-height: 0.8;
+  text-align: left;
+  font-size: 2.2vh;
+  position: absolute;
+  left: 50%;
+  top: 12%;
+  width: 40%;
+  height: 44%;
+}
+.study-pane .topic-ul-se {
+  list-style: none;
+  margin: 0;
+  padding-left: 1em;
+  line-height: 0.8;
+  text-align: left;
+  font-size: 2.2vh;
+  position: absolute;
+  left: 50%;
+  top: 56%;
+  width: 40%;
+  height: 44%;
+}
+.study-pane .topic-li {
+  list-style: none;
+  margin: 0;
+  padding-left: 1em;
+  line-height: 0.8;
+  text-align: left;
+  font-size: 1.9vh;
+  padding-top: 0.8vh;
+}
+.study-pane .topic-icon {
+  text-align: center;
+  font-size: 2.0vh;
+  padding-left: 0.6vh;
+}
+.study-pane .topic-text {
+  text-align: center;
+  font-size: 2.0vh;
+  line-height: 1.0;
+}
+.study-pane .topic-img {
+  display: block;
+  font-size: 2.0vh;
+  max-height: 7.5vh;
+  max-width: 10vw;
+  padding-top: 1.0vh;
+  margin: auto;
+}
+.study-pane .items-ul {
+  list-style: none;
+  margin: 0;
+  padding-left: 1em;
+  line-height: 0.6;
+  font-size: 1.5vh;
+}
+.study-pane .items-li {
+  list-style: none;
+  font-size: 1.1vh;
+}
+.study-pane .items-icon {
+  text-align: center;
+  font-size: 2.0vh;
+  padding-left: 0.6vh;
+}
+.study-pane .items-text {
+  text-align: center;
+  font-size: 2.0vh;
+  line-height: 1.0;
+}
+.study-stud {
+  display: table-cell;
+  vertical-align: middle;
+  text-align: left;
+  color: black;
+  font-weight: bold;
+  position: relative;
+  font-family: Roberto, sans-serif;
+}
+.study-stud .study-icon {
+  text-align: left;
+  font-size: 4.0vh;
+  position: absolute;
+  left: 27%;
+  top: 2%;
+  width: 5%;
+  height: 8%;
+}
+.study-stud .study-text {
+  text-align: left;
+  font-size: 4.0vh;
+  position: absolute;
+  left: 36%;
+  top: 2%;
+  width: 50%;
+  height: 8%;
+}
+.study-stud .topic-ul-nw {
+  list-style: none;
+  margin: 0;
+  padding-left: 1em;
+  line-height: 0.8;
+  text-align: left;
+  font-size: 2.0vh;
+  position: absolute;
+  left: 5%;
+  top: 12%;
+  width: 40%;
+  height: 44%;
+}
+.study-stud .topic-ul-sw {
+  list-style: none;
+  margin: 0;
+  padding-left: 1em;
+  line-height: 0.8;
+  text-align: left;
+  font-size: 2.0vh;
+  position: absolute;
+  left: 5%;
+  top: 56%;
+  width: 40%;
+  height: 44%;
+}
+.study-stud .topic-ul-ne {
+  list-style: none;
+  margin: 0;
+  padding-left: 1em;
+  line-height: 0.8;
+  text-align: left;
+  font-size: 2.0vh;
+  position: absolute;
+  left: 50%;
+  top: 12%;
+  width: 40%;
+  height: 44%;
+}
+.study-stud .topic-ul-se {
+  list-style: none;
+  margin: 0;
+  padding-left: 1em;
+  line-height: 0.8;
+  text-align: left;
+  font-size: 2.0vh;
+  position: absolute;
+  left: 50%;
+  top: 56%;
+  width: 40%;
+  height: 44%;
+}
+.study-stud .topic-li {
+  list-style: none;
+  margin: 0;
+  padding-left: 1em;
+  line-height: 0.8;
+  text-align: left;
+  font-size: 3.4vh;
+  list-style-type: none;
+  padding-top: 0.8vh;
+}
+.study-stud .topic-icon {
+  text-align: center;
+  font-size: 2.0vh;
+  padding-left: 0.6vh;
+}
+.study-stud .topic-text {
+  text-align: center;
+  font-size: 2.0vh;
+  line-height: 1.0;
+}
+.study-stud .topic-img {
+  display: block;
+  font-size: 2.0vh;
+  max-height: 25.0vh;
+  max-width: 20vw;
+  padding-top: 3.0vh;
+}
+.study-stud .items-ul {
+  list-style: none;
+  margin: 0;
+  padding-left: 1em;
+  line-height: 0.6;
+  font-size: 1.5vh;
+}
+.study-stud .items-li {
+  list-style: none;
+  font-size: 1.1vh;
+}
+.study-stud .items-icon {
+  text-align: center;
+  font-size: 2.0vh;
+  padding-left: 0.6vh;
+}
+.study-stud .items-text {
+  text-align: center;
+  font-size: 2.0vh;
+  line-height: 1.0;
+}
+.study-grid-core {
+  display: grid;
+  color: black;
+  font-weight: bold;
+  font-family: Roberto, sans-serif;
+  width: 100%;
+  height: 100%;
+  grid-template-columns: 50% 50%;
+  grid-template-rows: 350px 350px;
+  grid-template-areas: "nw ne" "sw se";
+  justify-items: start;
+  align-content: stretch;
+}
+.study-grid {
+  display: grid;
+  color: black;
+  font-weight: bold;
+  font-family: Roberto, sans-serif;
+  width: 100%;
+  height: 100%;
+  grid-template-columns: 50% 50%;
+  grid-template-rows: 350px 350px;
+  grid-template-areas: "nw ne" "sw se";
+  justify-items: start;
+  align-content: stretch;
+}
+.study-grid .study-icon {
+  text-align: left;
+  font-size: 3.0vh;
+}
+.study-grid .study-text {
+  text-align: left;
+  font-size: 3.0vh;
+}
+.study-grid .topin-ul-nw {
+  list-style: none;
+  margin: 0;
+  padding-left: 1em;
+  line-height: 0.8;
+  text-align: left;
+  font-size: 3.6vh;
+  grid-area: nw;
+}
+.study-grid .topin-ul-sw {
+  list-style: none;
+  margin: 0;
+  padding-left: 1em;
+  line-height: 0.8;
+  text-align: left;
+  font-size: 3.6vh;
+  grid-area: sw;
+}
+.study-grid .topin-ul-ne {
+  list-style: none;
+  margin: 0;
+  padding-left: 1em;
+  line-height: 0.8;
+  text-align: left;
+  font-size: 3.6vh;
+  grid-area: ne;
+}
+.study-grid .topin-ul-se {
+  list-style: none;
+  margin: 0;
+  padding-left: 1em;
+  line-height: 0.8;
+  text-align: left;
+  font-size: 3.6vh;
+  grid-area: se;
+}
+.study-grid .topin-li {
+  padding-top: 0.8vh;
+  font-size: 5.0vh;
+}
+.study-grid .topic-icon {
+  text-align: center;
+  font-size: 2.0vh;
+  padding-left: 0.6vh;
+}
+.study-grid .topic-text {
+  text-align: center;
+  font-size: 2.0vh;
+  line-height: 1.0;
+}
+.study-grid .topin-img {
+  display: block;
+  font-size: 2.0vh;
+  max-height: 25.0vh;
+  max-width: 20vw;
+  padding-top: 3.0vh;
+}
+.study-grid .items-ul {
+  list-style: none;
+  margin: 0;
+  padding-left: 1em;
+  line-height: 0.6;
+  font-size: 1.5vh;
+}
+.study-grid .items-li {
+  list-style: none;
+  font-size: 1.1vh;
+}
+.study-grid .items-icon {
+  text-align: center;
+  font-size: 2.0vh;
+  padding-left: 0.6vh;
+}
+.study-grid .items-text {
+  text-align: center;
+  font-size: 2.0vh;
+  line-height: 1.0;
+}

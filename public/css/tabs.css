@@ -1,0 +1,110 @@
+.mixin-clearfix:before,
+.mixin-clearfix:after {
+  display: table;
+  content: "";
+}
+.mixin-clearfix:after {
+  clear: both;
+}
+.mixin-hover {
+  cursor: pointer;
+  background: #240f1a;
+  color: #f7edf2;
+  border-radius: 8px;
+}
+.mixin-hover-tocs {
+  cursor: pointer;
+  background: #240f1a;
+  color: #f7edf2;
+}
+.mixin-border {
+  border: black solid 1px;
+}
+.mixin-border-left-top-right {
+  border-left: solid black 1px;
+  border-top: solid black 1px;
+  border-right: solid black 1px;
+  border-bottom: none;
+}
+.mixin-border-left-right-bottom {
+  border-left: solid black 1px;
+  border-top: none;
+  border-right: solid black 1px;
+  border-bottom: solid black 1px;
+}
+.mixin-border-left-top-bottom {
+  border-left: solid black 1px;
+  border-top: solid black 1px;
+  border-right: none;
+  border-bottom: solid black 1px;
+}
+.mixin-border-top-right-bottom {
+  border-left: none;
+  border-top: solid black 1px;
+  border-right: solid black 1px;
+  border-bottom: solid black 1px;
+}
+.mixin-shadow-none {
+  box-shadow: none;
+}
+.mixin-display-table {
+  display: table;
+}
+.mixin-vertical-top {
+  display: table-cell !important;
+  vertical-align: top;
+}
+.mixin-vertical-middle {
+  display: table-cell !important;
+  vertical-align: middle;
+}
+.mixin-vertical-bottom {
+  display: table-cell !important;
+  vertical-align: bottom;
+}
+.tabs-font {
+  font-family: Arial, Helvetica, sans-serif;
+}
+.tabs {
+  overflow: hidden;
+}
+.tabs > ul {
+  display: inline;
+  list-style: none none;
+  font-size: 1.0em;
+  margin: 0;
+  padding-left: 0;
+}
+.tabs > ul > li {
+  display: inline;
+  margin: 0 4px 0 0;
+  padding: 4px 8px 4px 8px;
+  font-family: Arial, Helvetica, sans-serif;
+  border-top-left-radius: 14px;
+  border-top-right-radius: 14px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+  background: #8f3d66;
+  color: #FFF;
+}
+.tabs > ul > li:hover {
+  cursor: pointer;
+  background: #240f1a;
+  color: #f7edf2;
+  border-radius: 8px;
+}
+.tabs > ul > .ton {
+  background: #8f3d66;
+  color: yellow;
+}
+.tabs > .ctn {
+  background: #8f3d66;
+  position: absolute;
+  left: 0;
+  top: 21px;
+  right: 0;
+  bottom: 0;
+  border-bottom-left-radius: 24px;
+  border-bottom-right-radius: 24px;
+}

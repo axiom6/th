@@ -1,0 +1,37 @@
+.grid-3x3-layout {
+  display: grid;
+  grid-template-columns: 180px auto 60px;
+  grid-template-rows: 60px auto 60px;
+  grid-column-gap: 6px;
+  grid-row-gap: 6px;
+  grid-template-areas: "logo corp find" "tocs view side" "pref foot trak";
+  justify-items: center;
+  align-items: center;
+}
+.grid-logo {
+  grid-area: logo;
+}
+.grid-corp {
+  grid-area: corp;
+}
+.grid-find {
+  grid-area: find;
+}
+.grid-tocs {
+  grid-area: tocs;
+}
+.grid-view {
+  grid-area: view;
+}
+.grid-side {
+  grid-area: side;
+}
+.grid-pref {
+  grid-area: pref;
+}
+.grid-foot {
+  grid-area: foot;
+}
+.grid-trak {
+  grid-area: trak;
+}

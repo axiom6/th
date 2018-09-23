@@ -1,0 +1,10 @@
+{
+  "Link":   { "name":"Link",    "type":"pane", "cells":[  1,12,  1,12 ], "toc":true  },
+  "Chord":  { "name":"Chord",   "type":"pane", "cells":[ 13,12,  1,12 ], "toc":true  },
+  "Cluster":{ "name":"Cluster", "type":"pane", "cells":[ 25,12,  1,12 ], "toc":true  },
+  "Axes":   { "name":"Axes",    "type":"pane", "cells":[  1,12, 13,12 ], "toc":true  },
+  "Radar":  { "name":"Radar",   "type":"pane", "cells":[ 13,12, 13,12 ], "toc":true  },
+  "Radial": { "name":"Radial",  "type":"pane", "cells":[ 25,12, 13,12 ], "toc":true  },
+  "Tree":   { "name":"Tree",    "type":"pane", "cells":[  1,12, 25,12 ], "toc":true  },
+  "Wheelc": { "name":"Wheelc",  "type":"pane", "cells":[ 13,12, 25,12 ], "toc":true  }
+}
