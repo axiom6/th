@@ -1,5 +1,6 @@
-`import Util       from '../util/Util.js'`
-`import Vis        from '../vis/Vis.js'`
+`import Util  from '../util/Util.js'`
+`import Vis   from '../vis/Vis.js'`
+`import Cube  from '../hum/Cube.js'`
 
 container = undefined
 stats = undefined
@@ -7,10 +8,7 @@ camera = undefined
 controls = undefined
 scene = undefined
 renderer = undefined
-pickingData = []
-pickingTexture = undefined
-pickingScene = undefined
-highlightBox = undefined
+
 mouse = new (THREE.Vector2)
 offset = new (THREE.Vector3)(10, 10, 10)
 
@@ -26,12 +24,9 @@ cubePos3      =  cubeSize + cubeSpacing
 
 studySize     = cubeSize    / 3
 ss            = studySize
-sd            =  ss * 1.5
-
+sd            =  ss
 sx            = [0,-sd,  0,sd, 0]
 sy            = [0,  0,-sd, 0,sd]
-
-
 
 canvasWidth   = baseSize
 canvasHeight  = baseSize
@@ -42,24 +37,24 @@ screenDepth   = 0
 aspectRatio   = 1
 modelRatio    = 1
 
+applyVertexColors = (geometry, color) ->
+  position = geometry.attributes.position
+  colors = []
+  i = 0
+  while i < position.count
+    colors.push color.r, color.g, color.b
+    i++
+  geometry.addAttribute 'color', new (THREE.Float32BufferAttribute)(colors, 3)
+  return
+
 
 init = ->
 
   resizeScreen()
-
-  applyVertexColors = (geometry, color) ->
-    position = geometry.attributes.position
-    colors = []
-    i = 0
-    while i < position.count
-      colors.push color.r, color.g, color.b
-      i++
-    geometry.addAttribute 'color', new (THREE.Float32BufferAttribute)(colors, 3)
-    return
-
   container = document.getElementById('container')
   camera = new (THREE.PerspectiveCamera)(70, aspectRatio, 1, 10000 )
   camera.position.z = 1000
+
   controls = new (THREE.TrackballControls)(camera)
   controls.rotateSpeed = 1.0
   controls.zoomSpeed = 1.2
@@ -68,11 +63,10 @@ init = ->
   controls.noPan = false
   controls.staticMoving = true
   controls.dynamicDampingFactor = 0.3
+
   scene = new (THREE.Scene)
-  scene.background = new (THREE.Color)(0xffffff)
-  pickingScene = new (THREE.Scene)
-  pickingTexture = new (THREE.WebGLRenderTarget)( screenWidth, screenHeight )
-  pickingTexture.texture.minFilter = THREE.LinearFilter
+  scene.background = new (THREE.Color)(0x333333)
+
   scene.add new (THREE.AmbientLight)(0x555555)
   light = new (THREE.SpotLight)(0xffffff, 1.5)
   light.position.set 0, 500, 2000
@@ -81,69 +75,30 @@ init = ->
   axes = new THREE.AxesHelper( 1000 )
   scene.add( axes )
 
-  pickingMaterial = new (THREE.MeshBasicMaterial)(vertexColors: THREE.VertexColors)
-  defaultMaterial = new (THREE.MeshPhongMaterial)(
-    color: 0xffffff
-    flatShading: true
-    vertexColors: THREE.VertexColors
-    shininess: 0)
-  geometriesDrawn = []
-  geometriesPicking = []
-  matrix     = new (THREE.Matrix4)
-  quaternion = new (THREE.Quaternion)
-  color      = new (THREE.Color)
-  i = 0
   for plane     in [ {name:'Information',z:cubePos1}, {name:'Knowledge',z:cubePos2}, {name:'Wisdom',   z:cubePos3} ]
     for row     in [ {name:'Learn',      y:cubePos1}, {name:'Do',       y:cubePos2}, {name:'Share',    y:cubePos3} ]
       for col   in [ {name:'Embrace',    x:cubePos1}, {name:'Innovate', x:cubePos2}, {name:'Encourage',x:cubePos3} ]
-        for dir in [0,1,2,3,4]
-          geometry = new (THREE.BoxBufferGeometry)
-          position = new (THREE.Vector3)
-          position.x = col.x              + sx[dir]
-          position.y = row.y * modelRatio + sy[dir]
-          position.z = plane.z
-          rotation = new (THREE.Euler)
-          rotation.x = 0
-          rotation.y = 0
-          rotation.z = 0
-          scale = new (THREE.Vector3)
-          scale.x = cubeSize              / 3
-          scale.y = cubeSize * modelRatio / 3
-          scale.z = cubeSize              / 3
-          quaternion.setFromEuler rotation, false
-          matrix.compose position, quaternion, scale
-          geometry.applyMatrix matrix
-          # give the geometry's vertices a random color, to be displayed
-          applyVertexColors geometry, color.setHex(Math.random() * 0xffffff)
-          geometriesDrawn.push geometry
-          geometry = geometry.clone()
-          # give the geometry's vertices a color corresponding to the "id"
-          applyVertexColors geometry, color.setHex(i)
-          geometriesPicking.push geometry
-          pickingData[i] =
-            position: position
-            rotation: rotation
-            scale:    scale
-          console.log( 'cubeData', { position:position, scale:scale } )
-          i++
-  objects = new (THREE.Mesh)(THREE.BufferGeometryUtils.mergeBufferGeometries(geometriesDrawn), defaultMaterial)
-  scene.add objects
-  pickingScene.add new (THREE.Mesh)(THREE.BufferGeometryUtils.mergeBufferGeometries(geometriesPicking), pickingMaterial)
-  highlightBox = new (THREE.Mesh)(new (THREE.BoxBufferGeometry), new (THREE.MeshLambertMaterial)(color: 0xffff00))
-  scene.add highlightBox
+        pracCube = new Cube( "Title", [col.x,row.y * modelRatio,plane.z], [0,0,0], [cubeSize,cubeSize,cubeSize],[90,90,90] )
+        scene.add( pracCube.mesh )
+
   renderer = new (THREE.WebGLRenderer)(antialias: true)
-  renderer.setPixelRatio window['devicePixelRatio']
-  renderer.setSize screenWidth, screenHeight
-  container.appendChild renderer.domElement
-  stats = new Stats
-  container.appendChild stats.dom
+  renderer.setPixelRatio( window['devicePixelRatio'] )
+  renderer.setSize( screenWidth, screenHeight )
+  container.appendChild( renderer.domElement )
+
   renderer.domElement.addEventListener 'mousemove', onMouseMove
   renderer.domElement.addEventListener 'mousedown', onMouseDown
+
   return
 
 onMouseMove = (e) ->
-  mouse.x =   e.clientX - screenWidth  / 2
-  mouse.y = ( e.clientY - screenHeight / 2 ) * aspectRatio
+  mouse.x = e.clientX
+  mouse.y = e.clientY
+  return
+
+onMouseMove2 = (e) ->
+  mouse.x =   e.clientX # - screenWidth  / 2
+  mouse.y = ( e.clientY  ) * aspectRatio
   return
 
 onMouseDown = (e) ->
@@ -152,9 +107,9 @@ onMouseDown = (e) ->
   return
 
 animate = ->
-  requestAnimationFrame animate
+  requestAnimationFrame( animate )
   render()
-  stats.update()
+  #stats.update()
   return
 
 resizeScreen = () ->
@@ -170,33 +125,10 @@ onWindowResize = () ->
   camera.updateProjectionMatrix()
   renderer.setSize( screenWidth, screenHeight )
 
-
-pick = ->
-  #render the picking scene off-screen
-  renderer.render pickingScene, camera, pickingTexture
-  #create buffer for reading single pixel
-  pixelBuffer = new Uint8Array(4)
-  #read the pixel under the mouse from the texture
-  #renderer.readRenderTargetPixels pickingTexture, mouse.x, screenWidth - (mouse.y), 1, 1, pixelBuffer
-  renderer.readRenderTargetPixels  pickingTexture, mouse.x, baseSize    -  mouse.y,  1, 1, pixelBuffer
-  #interpret the pixel as an ID
-  id   = pixelBuffer[0] << 16 | pixelBuffer[1] << 8 | pixelBuffer[2]
-  data = pickingData[id]
-  if data
-    #move our highlightBox so that it surrounds the picked object
-    if data.position and data.rotation and data.scale
-      highlightBox.position.copy data.position
-      highlightBox.rotation.copy data.rotation
-      highlightBox.scale.copy(data.scale).add offset
-      highlightBox.visible = true
-  else
-    highlightBox.visible = false
-  return
-
 render = ->
   controls.update()
-  pick()
-  renderer.render scene, camera
+  #pick()
+  renderer.render( scene, camera )
   return
 
 noop = (arg) ->
@@ -207,3 +139,4 @@ noop = (arg) ->
 Util.ready ->
   init()
   animate()
+
