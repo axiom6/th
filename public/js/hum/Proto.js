@@ -1,6 +1,8 @@
 import Util  from '../util/Util.js';
 import Vis   from '../vis/Vis.js';
 import Cube  from '../hum/Cube.js';
+import Rect  from '../hum/Rect.js';
+import Build from '../hum/Build.js';
 var animate, applyVertexColors, aspectRatio, baseSize, camera, canvasDepth, canvasHeight, canvasWidth, container, controls, cubeMargin, cubePos1, cubePos2, cubePos3, cubeScale, cubeSize, cubeSpacing, init, modelRatio, mouse, noop, offset, onMouseDown, onMouseMove, onMouseMove2, onWindowResize, render, renderer, resizeScreen, scene, screenDepth, screenHeight, screenWidth, sd, ss, stats, studySize, sx, sy;
 
 container = void 0;
@@ -29,11 +31,11 @@ cubeMargin = cubeSpacing / 2;
 
 baseSize = (cubeSize + cubeSpacing) * 3;
 
-cubePos1 = -cubeSize - cubeSpacing;
+cubePos1 = cubeSize + cubeSpacing;
 
 cubePos2 = 0;
 
-cubePos3 = cubeSize + cubeSpacing;
+cubePos3 = -cubeSize - cubeSpacing;
 
 studySize = cubeSize / 3;
 
@@ -41,9 +43,21 @@ ss = studySize;
 
 sd = ss;
 
-sx = [0, -sd, 0, sd, 0];
+sx = {
+  center: 0,
+  west: -sd,
+  north: 0,
+  east: sd,
+  south: 0
+};
 
-sy = [0, 0, -sd, 0, sd];
+sy = {
+  center: 0,
+  west: 0,
+  north: -sd,
+  east: 0,
+  south: sd
+};
 
 canvasWidth = baseSize;
 
@@ -74,7 +88,7 @@ applyVertexColors = function(geometry, color) {
 };
 
 init = function() {
-  var axes, col, j, k, l, len, len1, len2, light, plane, pracCube, ref, ref1, ref2, row;
+  var axes, build, col, cs, j, k, key, l, len, len1, len2, light, plane, pracCube, practice, ref, ref1, ref2, row, s, studies, study, studyCube, x, y, z;
   resizeScreen();
   container = document.getElementById('container');
   camera = new THREE.PerspectiveCamera(70, aspectRatio, 1, 10000);
@@ -95,6 +109,8 @@ init = function() {
   scene.add(light);
   axes = new THREE.AxesHelper(1000);
   scene.add(axes);
+  build = new Build();
+  cs = cubeSize;
   ref = [
     {
       name: 'Information',
@@ -130,7 +146,7 @@ init = function() {
       ref2 = [
         {
           name: 'Embrace',
-          x: cubePos1
+          x: cubePos3
         },
         {
           name: 'Innovate',
@@ -138,18 +154,32 @@ init = function() {
         },
         {
           name: 'Encourage',
-          x: cubePos3
+          x: cubePos1
         }
       ];
       for (l = 0, len2 = ref2.length; l < len2; l++) {
         col = ref2[l];
-        pracCube = new Cube("Title", [col.x, row.y * modelRatio, plane.z], [0, 0, 0], [cubeSize, cubeSize, cubeSize], [90, 90, 90]);
+        practice = build.getPractice(plane.name, row.name, col.name);
+        studies = build.getStudies(plane.name, practice.name);
+        pracCube = new Cube(practice.name, [col.x, row.y * modelRatio, plane.z], [cs, cs, cs], practice.hsv, 0.6);
         scene.add(pracCube.mesh);
+        scene.add(pracCube.tmesh);
+        for (key in studies) {
+          study = studies[key];
+          x = col.x + sx[study.dir];
+          y = row.y * modelRatio + sy[study.dir];
+          z = plane.z;
+          s = cubeSize / 3;
+          studyCube = new Rect(study.name, [x, y, z], [s, s, s], study.hsv, 1.0);
+          scene.add(studyCube.mesh);
+        }
       }
     }
   }
   renderer = new THREE.WebGLRenderer({
-    antialias: true
+    antialias: true,
+    alpha: true,
+    transparent: true
   });
   renderer.setPixelRatio(window['devicePixelRatio']);
   renderer.setSize(screenWidth, screenHeight);
@@ -159,8 +189,8 @@ init = function() {
 };
 
 onMouseMove = function(e) {
-  mouse.x = e.clientX;
-  mouse.y = e.clientY;
+  mouse.x = (event.clientX - screenWidth / 2) / 2;
+  mouse.y = (event.clientY - screenHeight / 2) / 2;
 };
 
 onMouseMove2 = function(e) {

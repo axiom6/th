@@ -1,6 +1,8 @@
 `import Util  from '../util/Util.js'`
 `import Vis   from '../vis/Vis.js'`
 `import Cube  from '../hum/Cube.js'`
+`import Rect  from '../hum/Rect.js'`
+`import Build from '../hum/Build.js'`
 
 container = undefined
 stats = undefined
@@ -18,15 +20,15 @@ cubeSpacing   = cubeSize    * 2 / 3
 cubeMargin    = cubeSpacing / 2
 
 baseSize      = (cubeSize+cubeSpacing) * 3
-cubePos1      = -cubeSize - cubeSpacing
+cubePos1      =  cubeSize + cubeSpacing
 cubePos2      = 0
-cubePos3      =  cubeSize + cubeSpacing
+cubePos3      = -cubeSize - cubeSpacing
 
 studySize     = cubeSize    / 3
 ss            = studySize
 sd            =  ss
-sx            = [0,-sd,  0,sd, 0]
-sy            = [0,  0,-sd, 0,sd]
+sx            = { center:0, west:-sd,  north:0, east:sd, south:0  }
+sy            = { center:0, west:0,  north:-sd, east:0,  south:sd }
 
 canvasWidth   = baseSize
 canvasHeight  = baseSize
@@ -74,14 +76,26 @@ init = ->
 
   axes = new THREE.AxesHelper( 1000 )
   scene.add( axes )
+  build = new Build()
 
+  cs = cubeSize
   for plane     in [ {name:'Information',z:cubePos1}, {name:'Knowledge',z:cubePos2}, {name:'Wisdom',   z:cubePos3} ]
     for row     in [ {name:'Learn',      y:cubePos1}, {name:'Do',       y:cubePos2}, {name:'Share',    y:cubePos3} ]
-      for col   in [ {name:'Embrace',    x:cubePos1}, {name:'Innovate', x:cubePos2}, {name:'Encourage',x:cubePos3} ]
-        pracCube = new Cube( "Title", [col.x,row.y * modelRatio,plane.z], [0,0,0], [cubeSize,cubeSize,cubeSize],[90,90,90] )
-        scene.add( pracCube.mesh )
+      for col   in [ {name:'Embrace',    x:cubePos3}, {name:'Innovate', x:cubePos2}, {name:'Encourage',x:cubePos1} ]
+        practice = build.getPractice( plane.name, row.name, col.name )
+        studies  = build.getStudies(  plane.name, practice.name )
+        pracCube = new Cube( practice.name, [col.x,row.y * modelRatio,plane.z], [cs,cs,cs],practice.hsv, 0.6 )
+        scene.add( pracCube.mesh  )
+        scene.add( pracCube.tmesh )
+        for key, study of studies
+          x = col.x              + sx[study.dir]
+          y = row.y * modelRatio + sy[study.dir]
+          z = plane.z
+          s = cubeSize / 3
+          studyCube = new Rect( study.name, [x,y,z], [s,s,s],study.hsv, 1.0 )
+          scene.add( studyCube.mesh )
 
-  renderer = new (THREE.WebGLRenderer)(antialias: true)
+  renderer = new THREE.WebGLRenderer( { antialias: true, alpha:true, transparent:true } )
   renderer.setPixelRatio( window['devicePixelRatio'] )
   renderer.setSize( screenWidth, screenHeight )
   container.appendChild( renderer.domElement )
@@ -92,8 +106,8 @@ init = ->
   return
 
 onMouseMove = (e) ->
-  mouse.x = e.clientX
-  mouse.y = e.clientY
+  mouse.x = ( event.clientX - screenWidth/2  ) / 2
+  mouse.y = ( event.clientY - screenHeight/2 ) / 2
   return
 
 onMouseMove2 = (e) ->

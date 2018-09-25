@@ -3,7 +3,6 @@ class Build
 
   Build.Muse = Build.syncJSON( 'json/Muse.json' )
   Build.Info = Build.syncJSON( 'json/Info.json' )
-  Build.Augm = Build.syncJSON( 'json/Augm.json' )
   Build.Know = Build.syncJSON( 'json/Know.json' )
   Build.Wise = Build.syncJSON( 'json/Wise.json' )
 
