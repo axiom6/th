@@ -5,14 +5,18 @@ var Cube;
 
 Cube = (function() {
   class Cube {
-    constructor(title, xyz, whd, hsv, opacity) {
+    constructor(plane, row, col1, title, xyz, whd, hsv, opacity) {
       var box, col, face, mat, mats, obj, rgb, side, text;
+      this.plane = plane;
+      this.row = row;
+      this.col = col1;
       this.title = title;
       this.xyz = xyz;
       this.whd = whd;
       this.hsv = hsv;
       this.opacity = opacity;
       box = new THREE.BoxBufferGeometry();
+      box.name = this.title;
       Cube.matrix.makeScale(this.whd[0], this.whd[1], this.whd[2]);
       box.applyMatrix(Cube.matrix);
       Cube.matrix.makeTranslation(this.xyz[0], this.xyz[1], this.xyz[2]);
@@ -26,12 +30,16 @@ Cube = (function() {
         side: THREE.BackSide // blemding:THREE.AdditiveBlending
       });
       this.mesh = new THREE.Mesh(box, mat);
-      // font: "helvetiker",
+      this.mesh.name = this.title;
+      this.mesh.geom = "Cube";
+      this.mesh.plane = this.plane;
+      this.mesh.row = this.row;
+      this.mesh.col = this.col;
       obj = {
         font: Cube.Font,
         size: 12,
         height: 6,
-        curveSegments: 2 // "helvetiker"
+        curveSegments: 2
       };
       text = new THREE.TextBufferGeometry(this.title, obj);
       face = new THREE.MeshBasicMaterial({
@@ -43,6 +51,11 @@ Cube = (function() {
       mats = [face, side];
       text.applyMatrix(Cube.matrix);
       this.tmesh = new THREE.Mesh(text, mats);
+      this.tmesh.name = this.title;
+      this.mesh.geom = "Text";
+      this.tmesh.plane = this.plane;
+      this.tmesh.row = this.row;
+      this.tmesh.col = this.col;
     }
 
     colorRgb(rgb) {

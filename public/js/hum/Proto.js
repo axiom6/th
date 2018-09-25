@@ -3,7 +3,9 @@ import Vis   from '../vis/Vis.js';
 import Cube  from '../hum/Cube.js';
 import Rect  from '../hum/Rect.js';
 import Build from '../hum/Build.js';
-var animate, applyVertexColors, aspectRatio, baseSize, camera, canvasDepth, canvasHeight, canvasWidth, container, controls, cubeMargin, cubePos1, cubePos2, cubePos3, cubeScale, cubeSize, cubeSpacing, init, modelRatio, mouse, noop, offset, onMouseDown, onMouseMove, onMouseMove2, onWindowResize, render, renderer, resizeScreen, scene, screenDepth, screenHeight, screenWidth, sd, ss, stats, studySize, sx, sy;
+import Act   from '../hum/Act.js';
+import Gui   from '../hum/Gui.js';
+var animate, applyVertexColors, aspectRatio, baseSize, camera, canvasDepth, canvasHeight, canvasWidth, container, controls, cubeMargin, cubePos1, cubePos2, cubePos3, cubeScale, cubeSize, cubeSpacing, init, modelRatio, mouse, noop, offset, onMouseDown, onMouseMove, onMouseMove2, onWindowResize, render, renderer, resizeScreen, reveal, scene, screenDepth, screenHeight, screenWidth, sd, ss, stats, studySize, sx, sy;
 
 container = void 0;
 
@@ -88,7 +90,7 @@ applyVertexColors = function(geometry, color) {
 };
 
 init = function() {
-  var axes, build, col, cs, j, k, key, l, len, len1, len2, light, plane, pracCube, practice, ref, ref1, ref2, row, s, studies, study, studyCube, x, y, z;
+  var act, axes, build, col, cs, gui, j, k, key, l, len, len1, len2, light, plane, pracCube, practice, ref, ref1, ref2, row, s, studies, study, studyCube, x, y, z;
   resizeScreen();
   container = document.getElementById('container');
   camera = new THREE.PerspectiveCamera(70, aspectRatio, 1, 10000);
@@ -161,7 +163,7 @@ init = function() {
         col = ref2[l];
         practice = build.getPractice(plane.name, row.name, col.name);
         studies = build.getStudies(plane.name, practice.name);
-        pracCube = new Cube(practice.name, [col.x, row.y * modelRatio, plane.z], [cs, cs, cs], practice.hsv, 0.6);
+        pracCube = new Cube(plane.name, row.name, col.name, practice.name, [col.x, row.y * modelRatio, plane.z], [cs, cs, cs], practice.hsv, 0.6);
         scene.add(pracCube.mesh);
         scene.add(pracCube.tmesh);
         for (key in studies) {
@@ -170,7 +172,7 @@ init = function() {
           y = row.y * modelRatio + sy[study.dir];
           z = plane.z;
           s = cubeSize / 3;
-          studyCube = new Rect(study.name, [x, y, z], [s, s, s], study.hsv, 1.0);
+          studyCube = new Rect(plane.name, row.name, col.name, study.name, [x, y, z], [s, s, s], study.hsv, 1.0);
           scene.add(studyCube.mesh);
         }
       }
@@ -184,13 +186,16 @@ init = function() {
   renderer.setPixelRatio(window['devicePixelRatio']);
   renderer.setSize(screenWidth, screenHeight);
   container.appendChild(renderer.domElement);
+  act = new Act(scene);
+  gui = new Gui(act);
+  noop(gui);
   renderer.domElement.addEventListener('mousemove', onMouseMove);
   renderer.domElement.addEventListener('mousedown', onMouseDown);
 };
 
 onMouseMove = function(e) {
-  mouse.x = (event.clientX - screenWidth / 2) / 2;
-  mouse.y = (event.clientY - screenHeight / 2) / 2;
+  mouse.x = (e.clientX - screenWidth / 2) / 2;
+  mouse.y = (e.clientY - screenHeight / 2) / 2;
 };
 
 onMouseMove2 = function(e) {
@@ -208,6 +213,17 @@ onMouseDown = function(e) {
   });
 };
 
+//scene.traverse( (child) -> reveal(child) )
+reveal = function(child) {
+  console.log('reveal', {
+    name: child.name,
+    camera: camera.position.z,
+    child: child.position.z
+  });
+  return child.visible = Math.abs(camera.position.z - child.position.z) < 1000;
+};
+
+// child.visible = camera.position.distanceToSquared(child.position) < 100
 animate = function() {
   requestAnimationFrame(animate);
   render();

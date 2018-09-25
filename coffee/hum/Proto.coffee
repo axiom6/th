@@ -3,6 +3,8 @@
 `import Cube  from '../hum/Cube.js'`
 `import Rect  from '../hum/Rect.js'`
 `import Build from '../hum/Build.js'`
+`import Act   from '../hum/Act.js'`
+`import Gui   from '../hum/Gui.js'`
 
 container = undefined
 stats = undefined
@@ -79,12 +81,12 @@ init = ->
   build = new Build()
 
   cs = cubeSize
-  for plane     in [ {name:'Information',z:cubePos1}, {name:'Knowledge',z:cubePos2}, {name:'Wisdom',   z:cubePos3} ]
-    for row     in [ {name:'Learn',      y:cubePos1}, {name:'Do',       y:cubePos2}, {name:'Share',    y:cubePos3} ]
-      for col   in [ {name:'Embrace',    x:cubePos3}, {name:'Innovate', x:cubePos2}, {name:'Encourage',x:cubePos1} ]
+  for plane     in [ {name:'Information', z:cubePos1}, {name:'Knowledge', z:cubePos2}, {name:'Wisdom',   z:cubePos3} ]
+    for row     in [ {name:'Learn',       y:cubePos1}, {name:'Do',        y:cubePos2}, {name:'Share',    y:cubePos3} ]
+      for col   in [ {name:'Embrace',     x:cubePos3}, {name:'Innovate',  x:cubePos2}, {name:'Encourage',x:cubePos1} ]
         practice = build.getPractice( plane.name, row.name, col.name )
         studies  = build.getStudies(  plane.name, practice.name )
-        pracCube = new Cube( practice.name, [col.x,row.y * modelRatio,plane.z], [cs,cs,cs],practice.hsv, 0.6 )
+        pracCube = new Cube( plane.name, row.name, col.name, practice.name, [col.x,row.y * modelRatio,plane.z], [cs,cs,cs],practice.hsv, 0.6 )
         scene.add( pracCube.mesh  )
         scene.add( pracCube.tmesh )
         for key, study of studies
@@ -92,7 +94,7 @@ init = ->
           y = row.y * modelRatio + sy[study.dir]
           z = plane.z
           s = cubeSize / 3
-          studyCube = new Rect( study.name, [x,y,z], [s,s,s],study.hsv, 1.0 )
+          studyCube = new Rect( plane.name, row.name, col.name, study.name, [x,y,z], [s,s,s],study.hsv, 1.0 )
           scene.add( studyCube.mesh )
 
   renderer = new THREE.WebGLRenderer( { antialias: true, alpha:true, transparent:true } )
@@ -100,14 +102,18 @@ init = ->
   renderer.setSize( screenWidth, screenHeight )
   container.appendChild( renderer.domElement )
 
+  act = new Act( scene )
+  gui = new Gui( act   )
+  noop( gui )
+
   renderer.domElement.addEventListener 'mousemove', onMouseMove
   renderer.domElement.addEventListener 'mousedown', onMouseDown
 
   return
 
 onMouseMove = (e) ->
-  mouse.x = ( event.clientX - screenWidth/2  ) / 2
-  mouse.y = ( event.clientY - screenHeight/2 ) / 2
+  mouse.x = ( e.clientX - screenWidth/2  ) / 2
+  mouse.y = ( e.clientY - screenHeight/2 ) / 2
   return
 
 onMouseMove2 = (e) ->
@@ -118,7 +124,14 @@ onMouseMove2 = (e) ->
 onMouseDown = (e) ->
   onMouseMove( e )
   console.log( 'onMouseDown',  { xm:mouse.x, ym: mouse.y, xs:e.clientX, ys:e.clientY } )
+  #scene.traverse( (child) -> reveal(child) )
   return
+
+reveal = (child) ->
+  console.log( 'reveal',  { name:child.name, camera:camera.position.z, child:child.position.z } )
+  child.visible = Math.abs( camera.position.z - child.position.z ) < 1000
+
+# child.visible = camera.position.distanceToSquared(child.position) < 100
 
 animate = ->
   requestAnimationFrame( animate )
