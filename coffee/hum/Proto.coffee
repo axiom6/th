@@ -32,9 +32,7 @@ sd            =  ss
 sx            = { center:0, west:-sd,  north:0, east:sd, south:0  }
 sy            = { center:0, west:0,  north:-sd, east:0,  south:sd }
 
-canvasWidth   = baseSize
-canvasHeight  = baseSize
-canvasDepth   = baseSize
+
 screenWidth   = 0
 screenHeight  = 0
 screenDepth   = 0
@@ -95,7 +93,7 @@ init = ->
         scene.add( pracCube.mesh  )
         scene.add( pracCube.tmesh )
         for key, study of studies
-          x = col.x              + sx[study.dir]
+          x = col.x                 + sx[study.dir]
           y = row.y * modelRatio + sy[study.dir]
           z = plane.z
           s = cubeSize / 3

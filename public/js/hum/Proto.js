@@ -5,7 +5,7 @@ import Rect  from '../hum/Rect.js';
 import Build from '../hum/Build.js';
 import Act   from '../hum/Act.js';
 import Gui   from '../hum/Gui.js';
-var animate, applyVertexColors, aspectRatio, baseSize, camera, canvasDepth, canvasHeight, canvasWidth, container, controls, cubeMargin, cubePos1, cubePos2, cubePos3, cubeScale, cubeSize, cubeSpacing, init, initGui, modelRatio, mouse, noop, offset, onMouseDown, onMouseMove, onMouseMove2, onWindowResize, render, renderer, resizeScreen, reveal, scene, screenDepth, screenHeight, screenWidth, sd, ss, stats, studySize, sx, sy;
+var animate, applyVertexColors, aspectRatio, baseSize, camera, container, controls, cubeMargin, cubePos1, cubePos2, cubePos3, cubeScale, cubeSize, cubeSpacing, init, initGui, modelRatio, mouse, noop, offset, onMouseDown, onMouseMove, onMouseMove2, onWindowResize, render, renderer, resizeScreen, reveal, scene, screenDepth, screenHeight, screenWidth, sd, ss, stats, studySize, sx, sy;
 
 container = void 0;
 
@@ -60,12 +60,6 @@ sy = {
   east: 0,
   south: sd
 };
-
-canvasWidth = baseSize;
-
-canvasHeight = baseSize;
-
-canvasDepth = baseSize;
 
 screenWidth = 0;
 

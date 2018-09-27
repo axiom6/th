@@ -86,7 +86,7 @@
 }
 .dg li.folder {
  padding:0;
- border-left:4px solid rgba(0,0,0,0);
+ border-left:4px solid #000000;
 }
 .dg li.title {
  cursor:pointer;
@@ -216,7 +216,7 @@
 }
 .dg.main {
  height:0;
- display:none;
+ display:block;
 }
 .dg.main {
  border-radius:5px;
@@ -262,7 +262,7 @@
 }
 .dg li.title {
  padding-left:16px;
- background:#000 url(data:image/gif;base64,R0lGODlhBQAFAJEAAP////Pz8////////yH5BAEAAAIALAAAAAAFAAUAAAIIlI+hKgFxoCgAOw==) 6px 10px no-repeat;
+ background:#000  6px 10px no-repeat url(data:image/gif;base64,R0lGODlhBQAFAJEAAP////Pz8////////yH5BAEAAAIALAAAAAAFAAUAAAIIlI+hKgFxoCgAOw==);
  cursor:pointer;
  border-bottom:1px solid rgba(255,255,255,0.2);
 }
