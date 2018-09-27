@@ -9,6 +9,7 @@
 scene    = undefined
 camera   = undefined
 renderer = undefined
+controls = undefined
 ikwElem  = undefined
 fontPrac = undefined
 
@@ -16,13 +17,6 @@ screenWidth   = 0
 screenHeight  = 0
 screenDepth   = 0
 aspectRatio   = 1
-
-mesh     = undefined
-color    = 0xAA55DD
-material = undefined
-controls = undefined
-gui      = undefined
-act      = undefined
 
 Util.ready ->
   init()
@@ -69,9 +63,9 @@ init = () ->
   
   #faces()
   #ground()
-  ikw()
+  group = ikw()
   lights()
-  ui()
+  ui( group )
 
   controls = new THREE.OrbitControls(camera, renderer.domElement )
   window.addEventListener( 'resize', resizeScreen, false )
@@ -96,22 +90,29 @@ space = () ->
 ikw = () ->
   sp    = space()
   build = new Build()
-  cs = sp.cubeSize
+  cs    = sp.cubeSize
+  group = new THREE.Group()
   for plane     in [ {name:'Information', z:sp.cubePos1}, {name:'Knowledge', z:sp.cubePos2}, {name:'Wisdom',   z:sp.cubePos3} ]
     for row     in [ {name:'Learn',       y:sp.cubePos1}, {name:'Do',        y:sp.cubePos2}, {name:'Share',    y:sp.cubePos3} ]
       for col   in [ {name:'Embrace',     x:sp.cubePos3}, {name:'Innovate',  x:sp.cubePos2}, {name:'Encourage',x:sp.cubePos1} ]
         practice = build.getPractice( plane.name, row.name, col.name )
         studies  = build.getStudies(  plane.name, practice.name )
         pracCube = new Cube( plane.name, row.name, col.name, practice.name, [col.x,row.y * sp.modelRatio,plane.z], [cs,cs,cs],practice.hsv, 0.6 )
-        scene.add( pracCube.mesh  )
-        scene.add( pracCube.tmesh )
+        group.add( pracCube.mesh  )
+        group.add( pracCube.tmesh )
         for key, study of studies
           x = col.x                 + sp.sx[study.dir]
           y = row.y * sp.modelRatio + sp.sy[study.dir]
           z = plane.z
           s = sp.cubeSize / 3
           studyCube = new Rect( plane.name, row.name, col.name, study.name, [x,y,z], [s,s,s],study.hsv, 1.0 )
-          scene.add( studyCube.mesh )
+          group.add( studyCube.mesh )
+  group.material = new THREE.MeshLambertMaterial( { color:0x888888, transparent:true, opacity:0.5, side:THREE.DoubleSide } )
+  group.rotation.set( 0, 0, 0 )
+  group.position.set( 0, 0, 0 )
+  group.scale.set(    1, 1, 1 )
+  scene.add( group )
+  group
 
 faces = ( ) ->
   color = 0x888888
@@ -180,37 +181,73 @@ lights = () ->
   scene.add( spotLight )
   return
 
-act = {
-  scaleX:1,    scaleY:1,     scaleZ:1,
-  positionX:0, positionY:0,  positionZ:0,
-  rotationX:0, rotationY:90, rotationZ:0,
-  boxColor:color, castShadow:true, boxOpacity:0.6 }
 
-ui = () ->
+
+ui = ( group ) ->
+
+  act = {
+    Information : true, Knowledge : true, Wisdom    : true,
+    Learn       : true, Do        : true, Share     : true,
+    Embrace     : true, Innovate  : true, Encourage : true,
+    Opacity:group.material.opacity, Color:group.material.color,
+    RotationX:group.rotation.x, RotationY:group.rotation.y, RotationZ:group.rotation.z,
+    PositionX:0, PositionY:0,  PositionZ:0,
+    ScaleX:1,    ScaleY:1,     ScaleZ:1 }
 
   gui = new dat.GUI()
 
-  console.log( 'act', act, color )
+  traverse = ( prop, value, visible ) ->
+    console.error( 'reveal', { prop:prop, value:value, visible:visible } ) if not visible?
+    reveal = (child) =>
+      #console.log( 'traverse', { name:child.name, tprop:prop, cprop:child[prop], value:value, visible:child.visible } )
+      if child[prop]? and child[prop] is value
+         child.visible = visible
+         console.log( 'reveal',  { name:child.name, prop:prop, value:value, visible:child.visible } )
+    group.traverse( reveal ) if group?
+    return
 
-  gui.add( act, 'boxOpacity', 0.1, 1.0 ).onChange( () -> mesh.material.opacity = act.boxOpacity )
+  information = () => traverse( 'plane', 'Information', act.Information )
+  knowledge   = () => traverse( 'plane', 'Knowledge',   act.Knowledge   )
+  wisdom      = () => traverse( 'plane', 'Wisdom',      act.Wisdom      )
+  learn       = () => traverse( 'row',   'Learn',       act.Learn       )
+  doDo        = () => traverse( 'row',   'Do',          act.Do          )
+  share       = () => traverse( 'row',   'Share',       act.Share       )
+  embrace     = () => traverse( 'col',   'Embrace',     act.Embrace     )
+  innovate    = () => traverse( 'col',   'Innovate',    act.Innovate    )
+  encourage   = () => traverse( 'col',   'Encourage',   act.Encourage   )
 
-  f1 = gui.addFolder('Scale')
-  f1.add( act, 'scaleX', 0.1, 5 ).onChange( () -> mesh.scale.x = act.scaleX )
-  f1.add( act, 'scaleY', 0.1, 5 ).onChange( () -> mesh.scale.y = act.scaleY )
-  f1.add( act, 'scaleZ', 0.1, 5 ).onChange( () -> mesh.scale.z = act.scaleZ )
+  # gui.add(      act, 'Opacity', 0.1, 1.0 ).onChange( () -> group.material.opacity = act.Opacity )
+  # gui.addColor( act, 'Color',   color    ).onChange( () -> group.material.color.setHex( dec2hex(act.Color) ) )
 
-  f2 = gui.addFolder('Position');
-  f2.add( act, 'positionX', -5, 5 ).onChange( () -> mesh.position.x = act.positionX )
-  f2.add( act, 'positionY', -3, 5 ).onChange( () -> mesh.position.y = act.positionY )
-  f2.add( act, 'positionZ', -5, 5 ).onChange( () -> mesh.position.z = act.positionZ )
+  f1 = gui.addFolder('Planes')
+  f1.add( act, 'Information' ).onChange( information )
+  f1.add( act, 'Knowledge'   ).onChange( knowledge   )
+  f1.add( act, 'Wisdom'      ).onChange( wisdom      )
 
-  f3 = gui.addFolder('Rotation')
-  f3.add( act, 'rotationX', -180, 180 ).onChange( () -> mesh.rotation.x = de2ra(act.rotationX) )
-  f3.add( act, 'rotationY', -180, 180 ).onChange( () -> mesh.rotation.y = de2ra(act.rotationY) )
-  f3.add( act, 'rotationZ', -180, 180 ).onChange( () -> mesh.rotation.z = de2ra(act.rotationZ) )
+  f2 = gui.addFolder('Rows')
+  f2.add( act, 'Learn' ).onChange( learn )
+  f2.add( act, 'Do'    ).onChange( doDo  )
+  f2.add( act, 'Share' ).onChange( share )
 
-  gui.addColor( act, 'boxColor',   color    ).onChange( () -> mesh.material.color.setHex( dec2hex(act.boxColor) ) )
-  gui.add(      act, 'castShadow', false    ).onChange( () -> mesh.castShadow  = act.castShadow )
+  f3 = gui.addFolder('Cols')
+  f3.add( act, 'Embrace'   ).onChange( embrace   )
+  f3.add( act, 'Innovate'  ).onChange( innovate  )
+  f3.add( act, 'Encourage' ).onChange( encourage )
+
+  f4 = gui.addFolder('Rotation')
+  f4.add( act, 'RotationX', -180, 180 ).onChange( () -> group.rotation.x = de2ra(act.RotationX) )
+  f4.add( act, 'RotationY', -180, 180 ).onChange( () -> group.rotation.y = de2ra(act.RotationY) )
+  f4.add( act, 'RotationZ', -180, 180 ).onChange( () -> group.rotation.z = de2ra(act.RotationZ) )
+
+  f5 = gui.addFolder('Position');
+  f5.add( act, 'PositionX', -500, 500 ).onChange( () -> group.position.x = act.PositionX )
+  f5.add( act, 'PositionY', -500, 500 ).onChange( () -> group.position.y = act.PositionY )
+  f5.add( act, 'PositionZ', -500, 500 ).onChange( () -> group.position.z = act.PositionZ )
+
+  f6 = gui.addFolder('Scale')
+  f6.add( act, 'ScaleX', 0.1, 5 ).onChange( () -> group.scale.x = act.ScaleX )
+  f6.add( act, 'ScaleY', 0.1, 5 ).onChange( () -> group.scale.y = act.ScaleY )
+  f6.add( act, 'ScaleZ', 0.1, 5 ).onChange( () -> group.scale.z = act.ScaleZ )
 
   return
 

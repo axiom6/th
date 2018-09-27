@@ -5,13 +5,15 @@ import Rect  from '../hum/Rect.js';
 import Build from '../hum/Build.js';
 import Act   from '../hum/Act.js';
 import Gui   from '../hum/Gui.js';
-var act, animate, aspectRatio, camera, color, controls, de2ra, dec2hex, faces, fontPrac, geom, ground, gui, ikw, ikwElem, init, lights, material, mesh, renderScene, renderer, resizeScreen, scene, screenDepth, screenHeight, screenWidth, space, ui;
+var animate, aspectRatio, camera, controls, de2ra, dec2hex, faces, fontPrac, geom, ground, ikw, ikwElem, init, lights, renderScene, renderer, resizeScreen, scene, screenDepth, screenHeight, screenWidth, space, ui;
 
 scene = void 0;
 
 camera = void 0;
 
 renderer = void 0;
+
+controls = void 0;
 
 ikwElem = void 0;
 
@@ -24,18 +26,6 @@ screenHeight = 0;
 screenDepth = 0;
 
 aspectRatio = 1;
-
-mesh = void 0;
-
-color = 0xAA55DD;
-
-material = void 0;
-
-controls = void 0;
-
-gui = void 0;
-
-act = void 0;
 
 Util.ready(function() {
   init();
@@ -62,7 +52,7 @@ resizeScreen = function() {
 };
 
 init = function() {
-  var axes, fontJSON;
+  var axes, fontJSON, group;
   resizeScreen();
   ikwElem = document.getElementById('Ikw');
   scene = new THREE.Scene();
@@ -85,9 +75,9 @@ init = function() {
   
   //faces()
   //ground()
-  ikw();
+  group = ikw();
   lights();
-  ui();
+  ui(group);
   controls = new THREE.OrbitControls(camera, renderer.domElement);
   window.addEventListener('resize', resizeScreen, false);
 };
@@ -123,10 +113,11 @@ space = function() {
 };
 
 ikw = function() {
-  var build, col, cs, j, key, len, plane, pracCube, practice, ref, results, row, s, sp, studies, study, studyCube, x, y, z;
+  var build, col, cs, group, j, k, key, l, len, len1, len2, plane, pracCube, practice, ref, ref1, ref2, row, s, sp, studies, study, studyCube, x, y, z;
   sp = space();
   build = new Build();
   cs = sp.cubeSize;
+  group = new THREE.Group();
   ref = [
     {
       name: 'Information',
@@ -141,78 +132,72 @@ ikw = function() {
       z: sp.cubePos3
     }
   ];
-  results = [];
   for (j = 0, len = ref.length; j < len; j++) {
     plane = ref[j];
-    results.push((function() {
-      var k, len1, ref1, results1;
-      ref1 = [
+    ref1 = [
+      {
+        name: 'Learn',
+        y: sp.cubePos1
+      },
+      {
+        name: 'Do',
+        y: sp.cubePos2
+      },
+      {
+        name: 'Share',
+        y: sp.cubePos3
+      }
+    ];
+    for (k = 0, len1 = ref1.length; k < len1; k++) {
+      row = ref1[k];
+      ref2 = [
         {
-          name: 'Learn',
-          y: sp.cubePos1
+          name: 'Embrace',
+          x: sp.cubePos3
         },
         {
-          name: 'Do',
-          y: sp.cubePos2
+          name: 'Innovate',
+          x: sp.cubePos2
         },
         {
-          name: 'Share',
-          y: sp.cubePos3
+          name: 'Encourage',
+          x: sp.cubePos1
         }
       ];
-      results1 = [];
-      for (k = 0, len1 = ref1.length; k < len1; k++) {
-        row = ref1[k];
-        results1.push((function() {
-          var l, len2, ref2, results2;
-          ref2 = [
-            {
-              name: 'Embrace',
-              x: sp.cubePos3
-            },
-            {
-              name: 'Innovate',
-              x: sp.cubePos2
-            },
-            {
-              name: 'Encourage',
-              x: sp.cubePos1
-            }
-          ];
-          results2 = [];
-          for (l = 0, len2 = ref2.length; l < len2; l++) {
-            col = ref2[l];
-            practice = build.getPractice(plane.name, row.name, col.name);
-            studies = build.getStudies(plane.name, practice.name);
-            pracCube = new Cube(plane.name, row.name, col.name, practice.name, [col.x, row.y * sp.modelRatio, plane.z], [cs, cs, cs], practice.hsv, 0.6);
-            scene.add(pracCube.mesh);
-            scene.add(pracCube.tmesh);
-            results2.push((function() {
-              var results3;
-              results3 = [];
-              for (key in studies) {
-                study = studies[key];
-                x = col.x + sp.sx[study.dir];
-                y = row.y * sp.modelRatio + sp.sy[study.dir];
-                z = plane.z;
-                s = sp.cubeSize / 3;
-                studyCube = new Rect(plane.name, row.name, col.name, study.name, [x, y, z], [s, s, s], study.hsv, 1.0);
-                results3.push(scene.add(studyCube.mesh));
-              }
-              return results3;
-            })());
-          }
-          return results2;
-        })());
+      for (l = 0, len2 = ref2.length; l < len2; l++) {
+        col = ref2[l];
+        practice = build.getPractice(plane.name, row.name, col.name);
+        studies = build.getStudies(plane.name, practice.name);
+        pracCube = new Cube(plane.name, row.name, col.name, practice.name, [col.x, row.y * sp.modelRatio, plane.z], [cs, cs, cs], practice.hsv, 0.6);
+        group.add(pracCube.mesh);
+        group.add(pracCube.tmesh);
+        for (key in studies) {
+          study = studies[key];
+          x = col.x + sp.sx[study.dir];
+          y = row.y * sp.modelRatio + sp.sy[study.dir];
+          z = plane.z;
+          s = sp.cubeSize / 3;
+          studyCube = new Rect(plane.name, row.name, col.name, study.name, [x, y, z], [s, s, s], study.hsv, 1.0);
+          group.add(studyCube.mesh);
+        }
       }
-      return results1;
-    })());
+    }
   }
-  return results;
+  group.material = new THREE.MeshLambertMaterial({
+    color: 0x888888,
+    transparent: true,
+    opacity: 0.5,
+    side: THREE.DoubleSide
+  });
+  group.rotation.set(0, 0, 0);
+  group.position.set(0, 0, 0);
+  group.scale.set(1, 1, 1);
+  scene.add(group);
+  return group;
 };
 
 faces = function() {
-  var ang, back, east, front, geometry2, material2, mesh2, north, south, west;
+  var ang, back, color, east, front, geometry2, material, material2, mesh, mesh2, north, south, west;
   color = 0x888888;
   ang = Math.PI / 2;
   material = new THREE.MeshLambertMaterial({
@@ -284,63 +269,126 @@ lights = function() {
   scene.add(spotLight);
 };
 
-act = {
-  scaleX: 1,
-  scaleY: 1,
-  scaleZ: 1,
-  positionX: 0,
-  positionY: 0,
-  positionZ: 0,
-  rotationX: 0,
-  rotationY: 90,
-  rotationZ: 0,
-  boxColor: color,
-  castShadow: true,
-  boxOpacity: 0.6
-};
-
-ui = function() {
-  var f1, f2, f3;
+ui = function(group) {
+  var act, doDo, embrace, encourage, f1, f2, f3, f4, f5, f6, gui, information, innovate, knowledge, learn, share, traverse, wisdom;
+  act = {
+    Information: true,
+    Knowledge: true,
+    Wisdom: true,
+    Learn: true,
+    Do: true,
+    Share: true,
+    Embrace: true,
+    Innovate: true,
+    Encourage: true,
+    Opacity: group.material.opacity,
+    Color: group.material.color,
+    RotationX: group.rotation.x,
+    RotationY: group.rotation.y,
+    RotationZ: group.rotation.z,
+    PositionX: 0,
+    PositionY: 0,
+    PositionZ: 0,
+    ScaleX: 1,
+    ScaleY: 1,
+    ScaleZ: 1
+  };
   gui = new dat.GUI();
-  console.log('act', act, color);
-  gui.add(act, 'boxOpacity', 0.1, 1.0).onChange(function() {
-    return mesh.material.opacity = act.boxOpacity;
+  traverse = function(prop, value, visible) {
+    var reveal;
+    if (visible == null) {
+      console.error('reveal', {
+        prop: prop,
+        value: value,
+        visible: visible
+      });
+    }
+    reveal = (child) => {
+      //console.log( 'traverse', { name:child.name, tprop:prop, cprop:child[prop], value:value, visible:child.visible } )
+      if ((child[prop] != null) && child[prop] === value) {
+        child.visible = visible;
+        return console.log('reveal', {
+          name: child.name,
+          prop: prop,
+          value: value,
+          visible: child.visible
+        });
+      }
+    };
+    if (group != null) {
+      group.traverse(reveal);
+    }
+  };
+  information = () => {
+    return traverse('plane', 'Information', act.Information);
+  };
+  knowledge = () => {
+    return traverse('plane', 'Knowledge', act.Knowledge);
+  };
+  wisdom = () => {
+    return traverse('plane', 'Wisdom', act.Wisdom);
+  };
+  learn = () => {
+    return traverse('row', 'Learn', act.Learn);
+  };
+  doDo = () => {
+    return traverse('row', 'Do', act.Do);
+  };
+  share = () => {
+    return traverse('row', 'Share', act.Share);
+  };
+  embrace = () => {
+    return traverse('col', 'Embrace', act.Embrace);
+  };
+  innovate = () => {
+    return traverse('col', 'Innovate', act.Innovate);
+  };
+  encourage = () => {
+    return traverse('col', 'Encourage', act.Encourage);
+  };
+  // gui.add(      act, 'Opacity', 0.1, 1.0 ).onChange( () -> group.material.opacity = act.Opacity )
+  // gui.addColor( act, 'Color',   color    ).onChange( () -> group.material.color.setHex( dec2hex(act.Color) ) )
+  f1 = gui.addFolder('Planes');
+  f1.add(act, 'Information').onChange(information);
+  f1.add(act, 'Knowledge').onChange(knowledge);
+  f1.add(act, 'Wisdom').onChange(wisdom);
+  f2 = gui.addFolder('Rows');
+  f2.add(act, 'Learn').onChange(learn);
+  f2.add(act, 'Do').onChange(doDo);
+  f2.add(act, 'Share').onChange(share);
+  f3 = gui.addFolder('Cols');
+  f3.add(act, 'Embrace').onChange(embrace);
+  f3.add(act, 'Innovate').onChange(innovate);
+  f3.add(act, 'Encourage').onChange(encourage);
+  f4 = gui.addFolder('Rotation');
+  f4.add(act, 'RotationX', -180, 180).onChange(function() {
+    return group.rotation.x = de2ra(act.RotationX);
   });
-  f1 = gui.addFolder('Scale');
-  f1.add(act, 'scaleX', 0.1, 5).onChange(function() {
-    return mesh.scale.x = act.scaleX;
+  f4.add(act, 'RotationY', -180, 180).onChange(function() {
+    return group.rotation.y = de2ra(act.RotationY);
   });
-  f1.add(act, 'scaleY', 0.1, 5).onChange(function() {
-    return mesh.scale.y = act.scaleY;
+  f4.add(act, 'RotationZ', -180, 180).onChange(function() {
+    return group.rotation.z = de2ra(act.RotationZ);
   });
-  f1.add(act, 'scaleZ', 0.1, 5).onChange(function() {
-    return mesh.scale.z = act.scaleZ;
+  f5 = gui.addFolder('Position');
+  f5.add(act, 'PositionX', -500, 500).onChange(function() {
+    return group.position.x = act.PositionX;
   });
-  f2 = gui.addFolder('Position');
-  f2.add(act, 'positionX', -5, 5).onChange(function() {
-    return mesh.position.x = act.positionX;
+  f5.add(act, 'PositionY', -500, 500).onChange(function() {
+    return group.position.y = act.PositionY;
   });
-  f2.add(act, 'positionY', -3, 5).onChange(function() {
-    return mesh.position.y = act.positionY;
+  f5.add(act, 'PositionZ', -500, 500).onChange(function() {
+    return group.position.z = act.PositionZ;
   });
-  f2.add(act, 'positionZ', -5, 5).onChange(function() {
-    return mesh.position.z = act.positionZ;
+  f6 = gui.addFolder('Scale');
+  f6.add(act, 'ScaleX', 0.1, 5).onChange(function() {
+    return group.scale.x = act.ScaleX;
   });
-  f3 = gui.addFolder('Rotation');
-  f3.add(act, 'rotationX', -180, 180).onChange(function() {
-    return mesh.rotation.x = de2ra(act.rotationX);
+  f6.add(act, 'ScaleY', 0.1, 5).onChange(function() {
+    return group.scale.y = act.ScaleY;
   });
-  f3.add(act, 'rotationY', -180, 180).onChange(function() {
-    return mesh.rotation.y = de2ra(act.rotationY);
-  });
-  f3.add(act, 'rotationZ', -180, 180).onChange(function() {
-    return mesh.rotation.z = de2ra(act.rotationZ);
-  });
-  gui.addColor(act, 'boxColor', color).onChange(function() {
-    return mesh.material.color.setHex(dec2hex(act.boxColor));
-  });
-  gui.add(act, 'castShadow', false).onChange(function() {
-    return mesh.castShadow = act.castShadow;
+  f6.add(act, 'ScaleZ', 0.1, 5).onChange(function() {
+    return group.scale.z = act.ScaleZ;
   });
 };
 
@@ -374,7 +422,7 @@ renderScene = function() {
 };
 
 geom = function() {
-  var geometry, geometry2, material2, mesh2;
+  var geometry, geometry2, material, material2, mesh, mesh2;
   geometry = new THREE.BoxGeometry(2, 2, 2);
   material = new THREE.MeshLambertMaterial({
     color: color,
