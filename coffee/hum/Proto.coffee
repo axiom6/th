@@ -51,11 +51,16 @@ applyVertexColors = (geometry, color) ->
   geometry.addAttribute 'color', new (THREE.Float32BufferAttribute)(colors, 3)
   return
 
+initGui = ->
+  ele = document.getElementById('Gui')
+  act = new Act( scene )
+  gui = new Gui( act, ele )
+  noop( gui )
 
 init = ->
 
-  resizeScreen()
-  container = document.getElementById('container')
+  container = document.getElementById('Ikw')
+  resizeScreen( container )
   camera = new (THREE.PerspectiveCamera)(70, aspectRatio, 1, 10000 )
   camera.position.z = 1000
 
@@ -102,12 +107,13 @@ init = ->
   renderer.setSize( screenWidth, screenHeight )
   container.appendChild( renderer.domElement )
 
+  ele = document.getElementById('Gui')
   act = new Act( scene )
-  gui = new Gui( act   )
+  gui = new Gui( act, ele )
   noop( gui )
 
-  renderer.domElement.addEventListener 'mousemove', onMouseMove
-  renderer.domElement.addEventListener 'mousedown', onMouseDown
+  # renderer.domElement.addEventListener 'mousemove', onMouseMove
+  # renderer.domElement.addEventListener 'mousedown', onMouseDown
 
   return
 
@@ -139,12 +145,14 @@ animate = ->
   #stats.update()
   return
 
-resizeScreen = () ->
-  screenWidth  = window.innerWidth
-  screenHeight = window.innerHeight
+resizeScreen = ( container ) ->
+  screenWidth  = container.clientWidth
+  screenHeight = container.clientHeight
   screenDepth  = baseSize
   aspectRatio  = screenWidth  / screenHeight
   modelRatio   = aspectRatio  / 2
+  console.log( "resizeScreen", { width:screenWidth, height:screenHeight } )
+  return
 
 onWindowResize = () ->
   resizeScreen()

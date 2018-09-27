@@ -6,21 +6,19 @@
   <meta name="viewport" content="initial-scale=1, maximum-scale=1" charset="utf-8">
   <style>
     body {  font-family: Monospace, monospace;  background-color:#f0f0f0;  margin:0;  overflow:hidden;  }
-    .info {  position: absolute;  background-color: black; opacity:0.8; color:white; text-align:center; top:0; width:100%; }
-    .info a {  color: #00ffff; }
   </style>
+  <!--link  href="css/gui2.css" rel="stylesheet"-->
   <script src="js/lib/jquery-3.3.1.js"></script>
   <script src="js/lib/three.js"></script>
-  <script src="js/lib/dat.gui.min.js"></script>
+  <script src="js/lib/dat.gui.js"></script>
   <script src="../examples/js/controls/TrackballControls.js"></script>
+  <script src="../examples/js/controls/OrbitControls.js"></script>
   <script src="../examples/js/utils/BufferGeometryUtils.js"></script>
   <script src="../examples/js/libs/stats.min.js"></script>
-  <script src="js/hum/Proto.js" type="module"></script>
+  <script src="js/hum/Muse.js" type="module"></script>
 </head>
 <body>
-  <div id="Proto" class="info">
-    <a href="http://threejs.org" target="_blank" rel="noopener">three.js</a> webgl - gpu picking
-  </div>
-  <div id="container"></div>
+  <div id="Ikw" style="position:absolute; left:0;   top:0; width:80%; height:100%;"></div>
+  <div id="Gui" style="position:absolute; left:80%; top:0; width:20%; height:100%;"></div>
 </body>
 </html>

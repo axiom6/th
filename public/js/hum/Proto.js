@@ -5,7 +5,7 @@ import Rect  from '../hum/Rect.js';
 import Build from '../hum/Build.js';
 import Act   from '../hum/Act.js';
 import Gui   from '../hum/Gui.js';
-var animate, applyVertexColors, aspectRatio, baseSize, camera, canvasDepth, canvasHeight, canvasWidth, container, controls, cubeMargin, cubePos1, cubePos2, cubePos3, cubeScale, cubeSize, cubeSpacing, init, modelRatio, mouse, noop, offset, onMouseDown, onMouseMove, onMouseMove2, onWindowResize, render, renderer, resizeScreen, reveal, scene, screenDepth, screenHeight, screenWidth, sd, ss, stats, studySize, sx, sy;
+var animate, applyVertexColors, aspectRatio, baseSize, camera, canvasDepth, canvasHeight, canvasWidth, container, controls, cubeMargin, cubePos1, cubePos2, cubePos3, cubeScale, cubeSize, cubeSpacing, init, initGui, modelRatio, mouse, noop, offset, onMouseDown, onMouseMove, onMouseMove2, onWindowResize, render, renderer, resizeScreen, reveal, scene, screenDepth, screenHeight, screenWidth, sd, ss, stats, studySize, sx, sy;
 
 container = void 0;
 
@@ -89,10 +89,18 @@ applyVertexColors = function(geometry, color) {
   geometry.addAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
 };
 
+initGui = function() {
+  var act, ele, gui;
+  ele = document.getElementById('Gui');
+  act = new Act(scene);
+  gui = new Gui(act, ele);
+  return noop(gui);
+};
+
 init = function() {
-  var act, axes, build, col, cs, gui, j, k, key, l, len, len1, len2, light, plane, pracCube, practice, ref, ref1, ref2, row, s, studies, study, studyCube, x, y, z;
-  resizeScreen();
-  container = document.getElementById('container');
+  var act, axes, build, col, cs, ele, gui, j, k, key, l, len, len1, len2, light, plane, pracCube, practice, ref, ref1, ref2, row, s, studies, study, studyCube, x, y, z;
+  container = document.getElementById('Ikw');
+  resizeScreen(container);
   camera = new THREE.PerspectiveCamera(70, aspectRatio, 1, 10000);
   camera.position.z = 1000;
   controls = new THREE.TrackballControls(camera);
@@ -186,13 +194,14 @@ init = function() {
   renderer.setPixelRatio(window['devicePixelRatio']);
   renderer.setSize(screenWidth, screenHeight);
   container.appendChild(renderer.domElement);
+  ele = document.getElementById('Gui');
   act = new Act(scene);
-  gui = new Gui(act);
+  gui = new Gui(act, ele);
   noop(gui);
-  renderer.domElement.addEventListener('mousemove', onMouseMove);
-  renderer.domElement.addEventListener('mousedown', onMouseDown);
 };
 
+// renderer.domElement.addEventListener 'mousemove', onMouseMove
+// renderer.domElement.addEventListener 'mousedown', onMouseDown
 onMouseMove = function(e) {
   mouse.x = (e.clientX - screenWidth / 2) / 2;
   mouse.y = (e.clientY - screenHeight / 2) / 2;
@@ -230,12 +239,16 @@ animate = function() {
 };
 
 //stats.update()
-resizeScreen = function() {
-  screenWidth = window.innerWidth;
-  screenHeight = window.innerHeight;
+resizeScreen = function(container) {
+  screenWidth = container.clientWidth;
+  screenHeight = container.clientHeight;
   screenDepth = baseSize;
   aspectRatio = screenWidth / screenHeight;
-  return modelRatio = aspectRatio / 2;
+  modelRatio = aspectRatio / 2;
+  console.log("resizeScreen", {
+    width: screenWidth,
+    height: screenHeight
+  });
 };
 
 onWindowResize = function() {
