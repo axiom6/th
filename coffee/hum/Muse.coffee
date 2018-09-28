@@ -74,11 +74,12 @@ init = () ->
 space = () ->
   sp = {}
   sp.cubeSize      = 144
+  sp.cubeHalf      =  sp.cubeSize / 2
   sp.cubeSpacing   =  sp.cubeSize * 2 / 3
   sp.baseSize      = (sp.cubeSize + sp.cubeSpacing) * 3
-  sp.cubePos1      =  sp.cubeSize + sp.cubeSpacing
-  sp.cubePos2      = 0
-  sp.cubePos3      = -sp.cubeSize - sp.cubeSpacing
+  sp.c1            =  sp.cubeSize + sp.cubeSpacing
+  sp.c2            = 0
+  sp.c3            = -sp.cubeSize - sp.cubeSpacing
   sp.studySize     =  sp.cubeSize / 3
   sp.ss            =  sp.studySize
   sp.sd            =  sp.ss
@@ -92,27 +93,87 @@ ikw = () ->
   build = new Build()
   cs    = sp.cubeSize
   group = new THREE.Group()
-  for plane     in [ {name:'Information', z:sp.cubePos1}, {name:'Knowledge', z:sp.cubePos2}, {name:'Wisdom',   z:sp.cubePos3} ]
-    for row     in [ {name:'Learn',       y:sp.cubePos1}, {name:'Do',        y:sp.cubePos2}, {name:'Share',    y:sp.cubePos3} ]
-      for col   in [ {name:'Embrace',     x:sp.cubePos3}, {name:'Innovate',  x:sp.cubePos2}, {name:'Encourage',x:sp.cubePos1} ]
-        practice = build.getPractice( plane.name, row.name, col.name )
-        studies  = build.getStudies(  plane.name, practice.name )
-        pracCube = new Cube( plane.name, row.name, col.name, practice.name, [col.x,row.y * sp.modelRatio,plane.z], [cs,cs,cs],practice.hsv, 0.6 )
-        group.add( pracCube.mesh  )
-        group.add( pracCube.tmesh )
+  for plane   in [ { name:'Information', z:sp.c1 }, { name:'Knowledge', z:sp.c2 }, { name:'Wisdom',   z:sp.c3 } ]
+    for row   in [ { name:'Learn',       y:sp.c1 }, { name:'Do',        y:sp.c2 }, { name:'Share',    y:sp.c3 } ]
+      for col in [ { name:'Embrace',     x:sp.c3 }, { name:'Innovate',  x:sp.c2 }, { name:'Encourage',x:sp.c1 } ]
+        practice  = build.getPractice( plane.name, row.name, col.name )
+        studies   = build.getStudies(  plane.name, practice.name )
+        pracCube  = new Cube( plane.name, row.name, col.name, practice.name, [col.x,row.y * sp.modelRatio,plane.z], [cs,cs,cs],practice.hsv, 0.6 )
+        pracGroup = new THREE.Group()
+        pracGroup.add( pracCube.mesh  )
+        pracGroup.add( pracCube.tmesh )
         for key, study of studies
           x = col.x                 + sp.sx[study.dir]
           y = row.y * sp.modelRatio + sp.sy[study.dir]
           z = plane.z
           s = sp.cubeSize / 3
-          studyCube = new Rect( plane.name, row.name, col.name, study.name, [x,y,z], [s,s,s],study.hsv, 1.0 )
-          group.add( studyCube.mesh )
+          studyCube = new Rect( plane.name, row.name, col.name, study.name, [x,y,z], [s,s],study.hsv, 1.0 )
+          pracGroup.add( studyCube.mesh )
+        group.add( pracGroup )
+  convey(  build, sp, group )
+  flow(    build, sp, group )
+  conduit( build, sp, group )
   group.material = new THREE.MeshLambertMaterial( { color:0x888888, transparent:true, opacity:0.5, side:THREE.DoubleSide } )
   group.rotation.set( 0, 0, 0 )
   group.position.set( 0, 0, 0 )
   group.scale.set(    1, 1, 1 )
   scene.add( group )
   group
+
+convey = ( build, sp, group ) ->
+  hsv = [0,50,50]
+  h   = sp.cubeHalf
+  d   = sp.cubeSpacing / 2
+  sx  = sp.cubeSpacing
+  sy  = sp.studySize
+  sh  = sp.studySize / 2
+  for plane   in [ { name:'Information', z:sp.c1     }, { name:'Knowledge', z:sp.c2        }, { name:'Wisdom', z:sp.c3        } ]
+    for row   in [ { name:'Learn',       y:sp.c1+h-d }, { name:'Do',        y:sp.c2+h-d-sh }, { name:'Share',  y:sp.c3+h-d-sy } ]
+      for col in [ { name:'Embrace',     x:sp.c3+h+d }, { name:'Innovate',  x:sp.c2+h+d    } ]
+        practice  = build.getPractice( plane.name, row.name, col.name )
+        [beg,end] = build.connectName( practice, 'east')
+        name = beg.name + ' ' + end.name
+        rect = new Rect( plane.name, row.name, col.name, name, [col.x,row.y,plane.z], [sx,sy],hsv, 0.7 )
+        group.add( rect.mesh )
+  return
+
+flow = ( build, sp, group ) ->
+  hsv = [0,50,50]
+  cs  = sp.cubeSize    / 2
+  ss  = sp.cubeSpacing / 2
+  s4  = sp.studySize   / 4
+  sx  = sp.studySize
+  sy  = sp.cubeSpacing + sp.studySize / 2
+  for plane   in [ { name:'Information', z:sp.c1 },      { name:'Knowledge', z:sp.c2    }, { name:'Wisdom',   z:sp.c3 } ]
+    for row   in [ { name:'Learn',       y:sp.c1-cs-ss+s4}, { name:'Do',        y:sp.c2-cs-ss-s4 } ]
+      for col in [ { name:'Embrace',     x:sp.c3},       { name:'Innovate',  x:sp.c2    }, { name:'Encourage',x:sp.c1 } ]
+        practice  = build.getPractice( plane.name, row.name, col.name )
+        [beg,end] = build.connectName( practice, 'east')
+        name = beg.name + ' ' + end.name
+        rect = new Rect( plane.name, row.name, col.name, name, [col.x,row.y,plane.z], [sx,sy],hsv, 0.7 )
+        group.add( rect.mesh )
+  return
+
+conduit = ( build, sp, group ) ->
+  hsv = [0,50,50]
+  sh  = sp.cubeHalf
+  ch  = sp.cubeSpacing / 2
+  dh  = sp.studySize   / 2
+  sx  = sp.studySize
+  sy  = sp.cubeSpacing
+  for plane   in [ { name:'Information', z:sp.c1-sh-ch }, { name:'Knowledge', z:sp.c2-sh-ch } ]
+    for row   in [ { name:'Learn',       y:sp.c1+dh },    { name:'Do',        y:sp.c2 }, { name:'Share',    y:sp.c3-dh } ]
+      for col in [ { name:'Embrace',     x:sp.c3 }, { name:'Innovate',  x:sp.c2 }, { name:'Encourage',x:sp.c1 } ]
+        practice  = build.getPractice( plane.name, row.name, col.name )
+        [beg,end] = build.connectName( practice, 'east')
+        name = beg.name + ' ' + end.name
+        rect = new Rect( plane.name, row.name, col.name, name, [0,0,0], [sx,sy],hsv, 0.7 )
+        rect.mesh.rotation.x = Math.PI / 2
+        rect.mesh.position.x = col.x
+        rect.mesh.position.y = row.y
+        rect.mesh.position.z = plane.z
+        group.add( rect.mesh )
+  return
 
 faces = ( ) ->
   color = 0x888888

@@ -6,7 +6,7 @@ var Cube;
 Cube = (function() {
   class Cube {
     constructor(plane, row, col1, title, xyz, whd, hsv, opacity) {
-      var box, col, face, mat, mats, obj, rgb, side, text;
+      var box, col, dx, dy, face, mat, mats, obj, rgb, side, text;
       this.plane = plane;
       this.row = row;
       this.col = col1;
@@ -42,6 +42,7 @@ Cube = (function() {
         curveSegments: 2
       };
       text = new THREE.TextBufferGeometry(this.title, obj);
+      text.computeBoundingBox();
       face = new THREE.MeshBasicMaterial({
         color: 0xffffff
       });
@@ -49,6 +50,9 @@ Cube = (function() {
         color: 0xffffff
       });
       mats = [face, side];
+      dx = 0.5 * (text.boundingBox.max.x - text.boundingBox.min.x);
+      dy = 0.5 * (text.boundingBox.max.y - text.boundingBox.min.y);
+      Cube.matrix.makeTranslation(this.xyz[0] - dx, this.xyz[1] - dy, this.xyz[2]);
       text.applyMatrix(Cube.matrix);
       this.tmesh = new THREE.Mesh(text, mats);
       this.tmesh.name = this.title;

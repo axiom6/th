@@ -28,10 +28,14 @@ class Cube
 
     obj  = { font:Cube.Font, size:12, height:6, curveSegments:2 }
     text = new THREE.TextBufferGeometry( @title, obj )
+    text.computeBoundingBox()
     face = new THREE.MeshBasicMaterial( { color: 0xffffff } )
     side = new THREE.MeshBasicMaterial( { color: 0xffffff } )
 
     mats = [face,side]
+    dx   = 0.5 * ( text.boundingBox.max.x - text.boundingBox.min.x )
+    dy   = 0.5 * ( text.boundingBox.max.y - text.boundingBox.min.y )
+    Cube.matrix.makeTranslation( @xyz[0]-dx, @xyz[1]-dy, @xyz[2]   )
     text.applyMatrix( Cube.matrix )
     @tmesh       = new THREE.Mesh( text, mats )
     @tmesh.name  = @title

@@ -5,7 +5,7 @@ import Rect  from '../hum/Rect.js';
 import Build from '../hum/Build.js';
 import Act   from '../hum/Act.js';
 import Gui   from '../hum/Gui.js';
-var animate, aspectRatio, camera, controls, de2ra, dec2hex, faces, fontPrac, geom, ground, ikw, ikwElem, init, lights, renderScene, renderer, resizeScreen, scene, screenDepth, screenHeight, screenWidth, space, ui;
+var animate, aspectRatio, camera, conduit, controls, convey, de2ra, dec2hex, faces, flow, fontPrac, geom, ground, ikw, ikwElem, init, lights, renderScene, renderer, resizeScreen, scene, screenDepth, screenHeight, screenWidth, space, ui;
 
 scene = void 0;
 
@@ -86,11 +86,12 @@ space = function() {
   var sp;
   sp = {};
   sp.cubeSize = 144;
+  sp.cubeHalf = sp.cubeSize / 2;
   sp.cubeSpacing = sp.cubeSize * 2 / 3;
   sp.baseSize = (sp.cubeSize + sp.cubeSpacing) * 3;
-  sp.cubePos1 = sp.cubeSize + sp.cubeSpacing;
-  sp.cubePos2 = 0;
-  sp.cubePos3 = -sp.cubeSize - sp.cubeSpacing;
+  sp.c1 = sp.cubeSize + sp.cubeSpacing;
+  sp.c2 = 0;
+  sp.c3 = -sp.cubeSize - sp.cubeSpacing;
   sp.studySize = sp.cubeSize / 3;
   sp.ss = sp.studySize;
   sp.sd = sp.ss;
@@ -113,7 +114,7 @@ space = function() {
 };
 
 ikw = function() {
-  var build, col, cs, group, j, k, key, l, len, len1, len2, plane, pracCube, practice, ref, ref1, ref2, row, s, sp, studies, study, studyCube, x, y, z;
+  var build, col, cs, group, j, k, key, l, len, len1, len2, plane, pracCube, pracGroup, practice, ref, ref1, ref2, row, s, sp, studies, study, studyCube, x, y, z;
   sp = space();
   build = new Build();
   cs = sp.cubeSize;
@@ -121,15 +122,15 @@ ikw = function() {
   ref = [
     {
       name: 'Information',
-      z: sp.cubePos1
+      z: sp.c1
     },
     {
       name: 'Knowledge',
-      z: sp.cubePos2
+      z: sp.c2
     },
     {
       name: 'Wisdom',
-      z: sp.cubePos3
+      z: sp.c3
     }
   ];
   for (j = 0, len = ref.length; j < len; j++) {
@@ -137,15 +138,15 @@ ikw = function() {
     ref1 = [
       {
         name: 'Learn',
-        y: sp.cubePos1
+        y: sp.c1
       },
       {
         name: 'Do',
-        y: sp.cubePos2
+        y: sp.c2
       },
       {
         name: 'Share',
-        y: sp.cubePos3
+        y: sp.c3
       }
     ];
     for (k = 0, len1 = ref1.length; k < len1; k++) {
@@ -153,15 +154,15 @@ ikw = function() {
       ref2 = [
         {
           name: 'Embrace',
-          x: sp.cubePos3
+          x: sp.c3
         },
         {
           name: 'Innovate',
-          x: sp.cubePos2
+          x: sp.c2
         },
         {
           name: 'Encourage',
-          x: sp.cubePos1
+          x: sp.c1
         }
       ];
       for (l = 0, len2 = ref2.length; l < len2; l++) {
@@ -169,20 +170,25 @@ ikw = function() {
         practice = build.getPractice(plane.name, row.name, col.name);
         studies = build.getStudies(plane.name, practice.name);
         pracCube = new Cube(plane.name, row.name, col.name, practice.name, [col.x, row.y * sp.modelRatio, plane.z], [cs, cs, cs], practice.hsv, 0.6);
-        group.add(pracCube.mesh);
-        group.add(pracCube.tmesh);
+        pracGroup = new THREE.Group();
+        pracGroup.add(pracCube.mesh);
+        pracGroup.add(pracCube.tmesh);
         for (key in studies) {
           study = studies[key];
           x = col.x + sp.sx[study.dir];
           y = row.y * sp.modelRatio + sp.sy[study.dir];
           z = plane.z;
           s = sp.cubeSize / 3;
-          studyCube = new Rect(plane.name, row.name, col.name, study.name, [x, y, z], [s, s, s], study.hsv, 1.0);
-          group.add(studyCube.mesh);
+          studyCube = new Rect(plane.name, row.name, col.name, study.name, [x, y, z], [s, s], study.hsv, 1.0);
+          pracGroup.add(studyCube.mesh);
         }
+        group.add(pracGroup);
       }
     }
   }
+  convey(build, sp, group);
+  flow(build, sp, group);
+  conduit(build, sp, group);
   group.material = new THREE.MeshLambertMaterial({
     color: 0x888888,
     transparent: true,
@@ -194,6 +200,196 @@ ikw = function() {
   group.scale.set(1, 1, 1);
   scene.add(group);
   return group;
+};
+
+convey = function(build, sp, group) {
+  var beg, col, d, end, h, hsv, j, k, l, len, len1, len2, name, plane, practice, rect, ref, ref1, ref2, row, sh, sx, sy;
+  hsv = [0, 50, 50];
+  h = sp.cubeHalf;
+  d = sp.cubeSpacing / 2;
+  sx = sp.cubeSpacing;
+  sy = sp.studySize;
+  sh = sp.studySize / 2;
+  ref = [
+    {
+      name: 'Information',
+      z: sp.c1
+    },
+    {
+      name: 'Knowledge',
+      z: sp.c2
+    },
+    {
+      name: 'Wisdom',
+      z: sp.c3
+    }
+  ];
+  for (j = 0, len = ref.length; j < len; j++) {
+    plane = ref[j];
+    ref1 = [
+      {
+        name: 'Learn',
+        y: sp.c1 + h - d
+      },
+      {
+        name: 'Do',
+        y: sp.c2 + h - d - sh
+      },
+      {
+        name: 'Share',
+        y: sp.c3 + h - d - sy
+      }
+    ];
+    for (k = 0, len1 = ref1.length; k < len1; k++) {
+      row = ref1[k];
+      ref2 = [
+        {
+          name: 'Embrace',
+          x: sp.c3 + h + d
+        },
+        {
+          name: 'Innovate',
+          x: sp.c2 + h + d
+        }
+      ];
+      for (l = 0, len2 = ref2.length; l < len2; l++) {
+        col = ref2[l];
+        practice = build.getPractice(plane.name, row.name, col.name);
+        [beg, end] = build.connectName(practice, 'east');
+        name = beg.name + ' ' + end.name;
+        rect = new Rect(plane.name, row.name, col.name, name, [col.x, row.y, plane.z], [sx, sy], hsv, 0.7);
+        group.add(rect.mesh);
+      }
+    }
+  }
+};
+
+flow = function(build, sp, group) {
+  var beg, col, cs, end, hsv, j, k, l, len, len1, len2, name, plane, practice, rect, ref, ref1, ref2, row, s4, ss, sx, sy;
+  hsv = [0, 50, 50];
+  cs = sp.cubeSize / 2;
+  ss = sp.cubeSpacing / 2;
+  s4 = sp.studySize / 4;
+  sx = sp.studySize;
+  sy = sp.cubeSpacing + sp.studySize / 2;
+  ref = [
+    {
+      name: 'Information',
+      z: sp.c1
+    },
+    {
+      name: 'Knowledge',
+      z: sp.c2
+    },
+    {
+      name: 'Wisdom',
+      z: sp.c3
+    }
+  ];
+  for (j = 0, len = ref.length; j < len; j++) {
+    plane = ref[j];
+    ref1 = [
+      {
+        name: 'Learn',
+        y: sp.c1 - cs - ss + s4
+      },
+      {
+        name: 'Do',
+        y: sp.c2 - cs - ss - s4
+      }
+    ];
+    for (k = 0, len1 = ref1.length; k < len1; k++) {
+      row = ref1[k];
+      ref2 = [
+        {
+          name: 'Embrace',
+          x: sp.c3
+        },
+        {
+          name: 'Innovate',
+          x: sp.c2
+        },
+        {
+          name: 'Encourage',
+          x: sp.c1
+        }
+      ];
+      for (l = 0, len2 = ref2.length; l < len2; l++) {
+        col = ref2[l];
+        practice = build.getPractice(plane.name, row.name, col.name);
+        [beg, end] = build.connectName(practice, 'east');
+        name = beg.name + ' ' + end.name;
+        rect = new Rect(plane.name, row.name, col.name, name, [col.x, row.y, plane.z], [sx, sy], hsv, 0.7);
+        group.add(rect.mesh);
+      }
+    }
+  }
+};
+
+conduit = function(build, sp, group) {
+  var beg, ch, col, dh, end, hsv, j, k, l, len, len1, len2, name, plane, practice, rect, ref, ref1, ref2, row, sh, sx, sy;
+  hsv = [0, 50, 50];
+  sh = sp.cubeHalf;
+  ch = sp.cubeSpacing / 2;
+  dh = sp.studySize / 2;
+  sx = sp.studySize;
+  sy = sp.cubeSpacing;
+  ref = [
+    {
+      name: 'Information',
+      z: sp.c1 - sh - ch
+    },
+    {
+      name: 'Knowledge',
+      z: sp.c2 - sh - ch
+    }
+  ];
+  for (j = 0, len = ref.length; j < len; j++) {
+    plane = ref[j];
+    ref1 = [
+      {
+        name: 'Learn',
+        y: sp.c1 + dh
+      },
+      {
+        name: 'Do',
+        y: sp.c2
+      },
+      {
+        name: 'Share',
+        y: sp.c3 - dh
+      }
+    ];
+    for (k = 0, len1 = ref1.length; k < len1; k++) {
+      row = ref1[k];
+      ref2 = [
+        {
+          name: 'Embrace',
+          x: sp.c3
+        },
+        {
+          name: 'Innovate',
+          x: sp.c2
+        },
+        {
+          name: 'Encourage',
+          x: sp.c1
+        }
+      ];
+      for (l = 0, len2 = ref2.length; l < len2; l++) {
+        col = ref2[l];
+        practice = build.getPractice(plane.name, row.name, col.name);
+        [beg, end] = build.connectName(practice, 'east');
+        name = beg.name + ' ' + end.name;
+        rect = new Rect(plane.name, row.name, col.name, name, [0, 0, 0], [sx, sy], hsv, 0.7);
+        rect.mesh.rotation.x = Math.PI / 2;
+        rect.mesh.position.x = col.x;
+        rect.mesh.position.y = row.y;
+        rect.mesh.position.z = plane.z;
+        group.add(rect.mesh);
+      }
+    }
+  }
 };
 
 faces = function() {
