@@ -14,6 +14,7 @@ Util.ready(function() {
 
 Muse = class Muse {
   constructor() {
+    this.resizeScreen = this.resizeScreen.bind(this);
     this.animate = this.animate.bind(this);
     [this.screenWidth, this.screenHeight, this.aspectRatio] = this.resizeScreen();
     this.ikwElem = document.getElementById('Ikw');
@@ -43,7 +44,7 @@ Muse = class Muse {
     window.addEventListener('resize', this.resizeScreen, false);
   }
 
-  de2ra(degree) {
+  deg2rad(degree) {
     return degree * (Math.PI / 180);
   }
 
@@ -68,7 +69,7 @@ Muse = class Muse {
     sp = {};
     sp.modelRatio = this.aspectRatio / 2;
     sp.cubeSize = 144;
-    sp.cubeWidth = sp.cubeSize * 1.5;
+    sp.cubeWidth = sp.cubeSize * 2.0;
     sp.cubeHeight = sp.cubeSize * sp.modelRatio;
     sp.cubeDepth = sp.cubeSize;
     sp.cubeHalf = sp.cubeSize / 2;
@@ -98,9 +99,9 @@ Muse = class Muse {
     sp.sy = {
       center: 0,
       west: 0,
-      north: -sp.sh,
+      north: sp.sh,
       east: 0,
-      south: sp.sh
+      south: -sp.sh
     };
     return sp;
   }
@@ -160,16 +161,15 @@ Muse = class Muse {
           col = ref2[l];
           practice = build.getPractice(plane.name, row.name, col.name);
           studies = build.getStudies(plane.name, practice.name);
-          pracCube = new Cube(plane.name, row.name, col.name, practice.name, [col.x, row.y, plane.z], [sp.cubeWidth, sp.cubeHeight, sp.cubeDepth], practice.hsv, 0.6);
+          pracCube = new Cube(plane.name, row.name, col.name, practice.name, [col.x, row.y, plane.z], [sp.cubeWidth, sp.cubeHeight, sp.cubeDepth], practice.hsv, 0.6, this.fontPrac);
           pracGroup = new THREE.Group();
           pracGroup.add(pracCube.mesh);
-          pracGroup.add(pracCube.tmesh);
           for (key in studies) {
             study = studies[key];
             x = col.x + sp.sx[study.dir];
             y = row.y + sp.sy[study.dir];
             z = plane.z;
-            studyCube = new Rect(plane.name, row.name, col.name, study.name, [x, y, z], [sp.sw, sp.sh], study.hsv, 1.0);
+            studyCube = new Rect(plane.name, row.name, col.name, study.name, [x, y, z], [sp.sw, sp.sh], study.hsv, 1.0, this.fontPrac);
             pracGroup.add(studyCube.mesh);
           }
           group.add(pracGroup);
@@ -244,8 +244,8 @@ Muse = class Muse {
           col = ref2[l];
           practice = build.getPractice(plane.name, row.name, col.name);
           [beg, end] = build.connectName(practice, 'east');
-          name = beg.name + ' ' + end.name;
-          rect = new Rect(plane.name, row.name, col.name, name, [col.x, row.y, plane.z], [w, h], hsv, 0.7);
+          name = beg + '\n' + end;
+          rect = new Rect(plane.name, row.name, col.name, name, [col.x, row.y, plane.z], [w, h], hsv, 0.7, this.fontPrac);
           group.add(rect.mesh);
         }
       }
@@ -303,9 +303,9 @@ Muse = class Muse {
         for (l = 0, len2 = ref2.length; l < len2; l++) {
           col = ref2[l];
           practice = build.getPractice(plane.name, row.name, col.name);
-          [beg, end] = build.connectName(practice, 'east');
-          name = beg.name + ' ' + end.name;
-          rect = new Rect(plane.name, row.name, col.name, name, [col.x, row.y, plane.z], [w, h], hsv, 0.7);
+          [beg, end] = build.connectName(practice, 'south');
+          name = beg + '\n' + end;
+          rect = new Rect(plane.name, row.name, col.name, name, [col.x, row.y, plane.z], [w, h], hsv, 0.7, this.fontPrac);
           group.add(rect.mesh);
         }
       }
@@ -363,10 +363,10 @@ Muse = class Muse {
         for (l = 0, len2 = ref2.length; l < len2; l++) {
           col = ref2[l];
           practice = build.getPractice(plane.name, row.name, col.name);
-          [beg, end] = build.connectName(practice, 'east');
-          name = beg.name + ' ' + end.name;
-          rect = new Rect(plane.name, row.name, col.name, name, [0, 0, 0], [w, h], hsv, 0.7);
-          rect.mesh.rotation.x = Math.PI / 2;
+          [beg, end] = build.connectName(practice, 'next');
+          name = beg + '\n' + end;
+          rect = new Rect(plane.name, row.name, col.name, name, [0, 0, 0], [w, h], hsv, 0.7, this.fontPrac);
+          rect.mesh.rotation.x = -Math.PI / 2;
           rect.mesh.position.x = col.x;
           rect.mesh.position.y = row.y;
           rect.mesh.position.z = plane.z;
@@ -419,7 +419,7 @@ Muse = class Muse {
     planeMesh = new THREE.Mesh(planeGeometry, planeMaterial);
     planeMesh.position.set(0, -3, 0);
     planeMesh.rotation.set(0, 0, 0);
-    planeMesh.rotation.x = de2ra(90);
+    planeMesh.rotation.x = this.deg2rad(90);
     planeMesh.receiveShadow = true;
     this.scene.add(planeMesh);
   }
@@ -484,18 +484,13 @@ Muse = class Muse {
         });
       }
       reveal = (child) => {
-        //console.log( 'traverse', { name:child.name, tprop:prop, cprop:child[prop], value:value, visible:child.visible } )
+        // console.log( 'traverse', { name:child.name, tprop:prop, cprop:child[prop], value:value, visible:child.visible } )
         if ((child[prop] != null) && child[prop] === value) {
-          child.visible = visible;
-          return console.log('reveal', {
-            name: child.name,
-            prop: prop,
-            value: value,
-            visible: child.visible
-          });
+          return child.visible = visible;
         }
       };
       if (group != null) {
+        // console.log( 'reveal',  { name:child.name, geom:child.geom, prop:prop, value:value, visible:child.visible } )
         group.traverse(reveal);
       }
     };
@@ -541,14 +536,14 @@ Muse = class Muse {
     f3.add(act, 'Innovate').onChange(innovate);
     f3.add(act, 'Encourage').onChange(encourage);
     f4 = gui.addFolder('Rotation');
-    f4.add(act, 'RotationX', -180, 180).onChange(function() {
-      return group.rotation.x = de2ra(act.RotationX);
+    f4.add(act, 'RotationX', -180, 180).onChange(() => {
+      return group.rotation.x = this.deg2rad(act.RotationX);
     });
-    f4.add(act, 'RotationY', -180, 180).onChange(function() {
-      return group.rotation.y = de2ra(act.RotationY);
+    f4.add(act, 'RotationY', -180, 180).onChange(() => {
+      return group.rotation.y = this.deg2rad(act.RotationY);
     });
-    f4.add(act, 'RotationZ', -180, 180).onChange(function() {
-      return group.rotation.z = de2ra(act.RotationZ);
+    f4.add(act, 'RotationZ', -180, 180).onChange(() => {
+      return group.rotation.z = this.deg2rad(act.RotationZ);
     });
     f5 = gui.addFolder('Position');
     f5.add(act, 'PositionX', -500, 500).onChange(function() {
@@ -612,7 +607,7 @@ Muse = class Muse {
     mesh = new THREE.Mesh(geometry, material);
     mesh.position.set(0, 0, 0);
     mesh.rotation.set(0, 0, 0);
-    mesh.rotation.y = de2ra(-90);
+    mesh.rotation.y = this.deg2rad(-90);
     mesh.scale.set(1, 1, 1);
     mesh.doubleSided = true;
     mesh.castShadow = true;

@@ -5,11 +5,9 @@
 
 class Cube
 
-  Cube.JSON = Build.syncJSON( 'webfonts/helvetiker_regular.typeface.json' )
-  Cube.Font = new THREE.Font( Cube.JSON )
   @matrix   = new THREE.Matrix4()
 
-  constructor:( @plane, @row, @col, @title, @xyz, @whd, @hsv, @opacity ) ->
+  constructor:( @plane, @row, @col, @title, @xyz, @whd, @hsv, @opacity, @font ) ->
     box = new THREE.BoxBufferGeometry()
     box.name = @title
     Cube.matrix.makeScale(       @whd[0], @whd[1], @whd[2] )
@@ -26,7 +24,7 @@ class Cube
     @mesh.row   = @row
     @mesh.col   = @col
 
-    obj  = { font:Cube.Font, size:12, height:6, curveSegments:2 }
+    obj  = { font:@font, size:12, height:6, curveSegments:2 }
     text = new THREE.TextBufferGeometry( @title, obj )
     text.computeBoundingBox()
     face = new THREE.MeshBasicMaterial( { color: 0xffffff } )
@@ -39,10 +37,11 @@ class Cube
     text.applyMatrix( Cube.matrix )
     @tmesh       = new THREE.Mesh( text, mats )
     @tmesh.name  = @title
-    @mesh.geom   = "Text"
+    @tmesh.geom  = "Text"
     @tmesh.plane = @plane
     @tmesh.row   = @row
     @tmesh.col   = @col
+    @mesh.add( @tmesh )
 
   colorRgb:( rgb ) ->
     "rgb(#{Math.round(rgb[0]*255)}, #{Math.round(rgb[1]*255)}, #{Math.round(rgb[2]*255)})"

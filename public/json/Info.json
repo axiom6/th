@@ -122,7 +122,7 @@
       "Diagnose":   { "icon":"fas fa-stethoscope" },
       "Evaluate":   { "icon":"fas fa-balance-scale" },
       "Recreate":   { "icon":"fas fa-universal-access" } },
-    "Deploy":      { "dir":"south", "icon":"fas fa-server",     "hsv":[60,90,90],
+    "Deploy":      { "dir":"south", "icon":"fas fa-server",     "hsv":[90,90,90],
       "System":      { "icon":"fas fa-server"},
       "Config":      { "icon":"fas fa-cogs"  },
       "Maintain":    { "icon":"fas fa-lock"  } }
@@ -140,7 +140,7 @@
       "Query":      { "icon":"fas fa-lock"    },
       "History":    { "icon":"fab fa-leanpub" },
       "Share":      { "icon":"fas fa-truck"   } },
-    "Security":    { "dir":"south","icon":"fas fa-lock",     "hsv":[60,90,90],
+    "Security":    { "dir":"south","icon":"fas fa-lock",     "hsv":[90,90,90],
       "Admin":       { "icon":"fas fa-circle" },
       "Contingency": { "icon":"fas fa-circle" },
       "Provision":   { "icon":"fas fa-circle" } }
@@ -158,7 +158,7 @@
       "Onboard":      { "icon":"fas fa-circle" },
       "Track":        { "icon":"fas fa-circle" },
       "Finance":      { "icon":"fas fa-circle" } },
-    "Comply":      { "dir":"south", "icon":"fas fa-gavel",     "hsv":[80,90,90],
+    "Comply":      { "dir":"south", "icon":"fas fa-gavel",     "hsv":[90,90,90],
       "Regulate":     { "icon":"fas fa-circle" },
       "Monitor":      { "icon":"fas fa-circle" },
       "Provision":    { "icon":"fas fa-circle" } }

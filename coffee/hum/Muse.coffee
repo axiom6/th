@@ -28,7 +28,7 @@ class Muse
 
     @ikwElem.appendChild( @renderer.domElement );
 
-    @camera = new THREE.PerspectiveCamera( 45, @aspectRatio, 1 , 10000 )
+    @camera = new THREE.PerspectiveCamera( 45, @aspectRatio, 1, 10000 )
     @camera.position.set( 0, 6, 1200 )
     @camera.lookAt( @scene.position )
     @scene.add(@camera)
@@ -48,11 +48,10 @@ class Muse
     @controls = new THREE.OrbitControls( @camera, @renderer.domElement )
     window.addEventListener( 'resize', @resizeScreen, false )
 
-
-  de2ra:( degree ) ->
+  deg2rad:( degree ) ->
    degree*(Math.PI/180)
 
-  resizeScreen:() ->
+  resizeScreen:() =>
     @screenWidth  = window.innerWidth
     @screenHeight = window.innerHeight
     @aspectRatio  = @screenWidth  / @screenHeight
@@ -67,7 +66,7 @@ class Muse
     sp = {}
     sp.modelRatio    =  @aspectRatio / 2
     sp.cubeSize      =  144
-    sp.cubeWidth     =  sp.cubeSize * 1.5
+    sp.cubeWidth     =  sp.cubeSize * 2.0
     sp.cubeHeight    =  sp.cubeSize * sp.modelRatio
     sp.cubeDepth     =  sp.cubeSize
     sp.cubeHalf      =  sp.cubeSize   / 2
@@ -87,8 +86,8 @@ class Muse
     sp.studyHeight   =  sp.cubeHeight / 3
     sp.sw            =  sp.studyWidth
     sp.sh            =  sp.studyHeight
-    sp.sx            = { center:0, west:-sp.sw, north:0,      east:sp.sw, south:0     }
-    sp.sy            = { center:0, west:0,      north:-sp.sh, east:0,     south:sp.sh }
+    sp.sx            = { center:0, west:-sp.sw, north:0,     east:sp.sw, south:0      }
+    sp.sy            = { center:0, west:0,      north:sp.sh, east:0,     south:-sp.sh }
     sp
 
   ikw: () ->
@@ -100,16 +99,15 @@ class Muse
         for col in [ { name:'Embrace',     x:sp.x3 }, { name:'Innovate',  x:sp.x2 }, { name:'Encourage',x:sp.x1 } ]
           practice  = build.getPractice( plane.name, row.name, col.name )
           studies   = build.getStudies(  plane.name, practice.name )
-          pracCube  = new Cube( plane.name, row.name, col.name, practice.name, [col.x,row.y,plane.z], [sp.cubeWidth,sp.cubeHeight,sp.cubeDepth],practice.hsv, 0.6 )
+          pracCube  = new Cube( plane.name, row.name, col.name, practice.name, [col.x,row.y,plane.z], [sp.cubeWidth,sp.cubeHeight,sp.cubeDepth],practice.hsv, 0.6, @fontPrac )
           pracGroup = new THREE.Group()
           pracGroup.add( pracCube.mesh  )
-          pracGroup.add( pracCube.tmesh )
           for key, study of studies
             x = col.x + sp.sx[study.dir]
             y = row.y + sp.sy[study.dir]
             z = plane.z
-            studyCube = new Rect( plane.name, row.name, col.name, study.name, [x,y,z], [sp.sw,sp.sh],study.hsv, 1.0 )
-            pracGroup.add( studyCube.mesh )
+            studyCube = new Rect( plane.name, row.name, col.name, study.name, [x,y,z], [sp.sw,sp.sh],study.hsv, 1.0, @fontPrac )
+            pracGroup.add( studyCube.mesh  )
           group.add( pracGroup )
     @convey(  build, sp, group )
     @flow(    build, sp, group )
@@ -131,8 +129,8 @@ class Muse
         for col in [ { name:'Embrace',     x:sp.x3+x }, { name:'Innovate',  x:sp.x2+x } ]
           practice  = build.getPractice( plane.name, row.name, col.name )
           [beg,end] = build.connectName( practice, 'east')
-          name = beg.name + ' ' + end.name
-          rect = new Rect( plane.name, row.name, col.name, name, [col.x,row.y,plane.z], [w,h],hsv, 0.7 )
+          name = beg + '\n' + end
+          rect = new Rect( plane.name, row.name, col.name, name, [col.x,row.y,plane.z], [w,h],hsv, 0.7, @fontPrac  )
           group.add( rect.mesh )
     return
 
@@ -145,9 +143,9 @@ class Muse
       for row   in [ { name:'Learn',       y:sp.y1-y}, { name:'Do',        y:sp.y2-y } ]
         for col in [ { name:'Embrace',     x:sp.x3},   { name:'Innovate',  x:sp.x2   }, { name:'Encourage', x:sp.x1 } ]
           practice  = build.getPractice( plane.name, row.name, col.name )
-          [beg,end] = build.connectName( practice, 'east')
-          name = beg.name + ' ' + end.name
-          rect = new Rect( plane.name, row.name, col.name, name, [col.x,row.y,plane.z], [w,h],hsv, 0.7 )
+          [beg,end] = build.connectName( practice, 'south')
+          name = beg + '\n' + end
+          rect = new Rect( plane.name, row.name, col.name, name, [col.x,row.y,plane.z], [w,h],hsv, 0.7, @fontPrac  )
           group.add( rect.mesh )
     return
 
@@ -160,10 +158,10 @@ class Muse
       for row   in [ { name:'Learn',       y:sp.y1 },   { name:'Do',        y:sp.y2   }, { name:'Share',    y:sp.y3 } ]
         for col in [ { name:'Embrace',     x:sp.x3 },   { name:'Innovate',  x:sp.x2   }, { name:'Encourage',x:sp.x1 } ]
           practice  = build.getPractice( plane.name, row.name, col.name )
-          [beg,end] = build.connectName( practice, 'east')
-          name = beg.name + ' ' + end.name
-          rect = new Rect( plane.name, row.name, col.name, name, [0,0,0], [w,h],hsv, 0.7 )
-          rect.mesh.rotation.x = Math.PI / 2
+          [beg,end] = build.connectName( practice, 'next')
+          name = beg + '\n' + end
+          rect = new Rect( plane.name, row.name, col.name, name, [0,0,0], [w,h],hsv, 0.7, @fontPrac )
+          rect.mesh.rotation.x = -Math.PI / 2
           rect.mesh.position.x = col.x
           rect.mesh.position.y = row.y
           rect.mesh.position.z = plane.z
@@ -191,7 +189,7 @@ class Muse
     material2 = new THREE.MeshLambertMaterial({ color:color, transparent:true } )
     mesh2     = new THREE.Mesh(geometry2, material2)
 
-    mesh      = new THREE.Group().add( front ).add( back ).add( west ).add( east ).add( north ).add( south).add( mesh2 )
+    mesh      = new THREE.Group().add(front).add(back).add(west).add(east).add(north).add(south).add(mesh2)
     mesh.material = material
     @scene.add(mesh)
     return
@@ -201,27 +199,27 @@ class Muse
     planeGeometry = new THREE.BoxGeometry( 10, 10, 0.1 );
     planeMaterial = new THREE.MeshLambertMaterial({ color:0xffffff, side:THREE.DoubleSide } )
 
-    planeMesh = new THREE.Mesh(planeGeometry, planeMaterial)
+    planeMesh = new THREE.Mesh( planeGeometry, planeMaterial )
     planeMesh.position.set(0, -3, 0)
     planeMesh.rotation.set(0, 0, 0)
-    planeMesh.rotation.x = de2ra(90)
+    planeMesh.rotation.x = @deg2rad(90)
     planeMesh.receiveShadow = true
     @scene.add(planeMesh)
     return
   
   lights:() ->
 
-    object3d  = new THREE.DirectionalLight('white', 0.15)
+    object3d  = new THREE.DirectionalLight( 'white', 0.15 )
     object3d.position.set(6,3,9)
     object3d.name = 'Back light'
     @scene.add(object3d)
 
-    object3d = new THREE.DirectionalLight('white', 0.35);
+    object3d = new THREE.DirectionalLight( 'white', 0.35 );
     object3d.position.set(-6, -3, 0)
     object3d.name   = 'Key light'
     @scene.add(object3d)
 
-    object3d = new THREE.DirectionalLight('white', 0.55)
+    object3d = new THREE.DirectionalLight( 'white', 0.55 )
     object3d.position.set(9, 9, 6)
     object3d.name = 'Fill light'
     @scene.add(object3d)
@@ -253,10 +251,10 @@ class Muse
     traverse = ( prop, value, visible ) ->
       console.error( 'reveal', { prop:prop, value:value, visible:visible } ) if not visible?
       reveal = (child) =>
-        #console.log( 'traverse', { name:child.name, tprop:prop, cprop:child[prop], value:value, visible:child.visible } )
+        # console.log( 'traverse', { name:child.name, tprop:prop, cprop:child[prop], value:value, visible:child.visible } )
         if child[prop]? and child[prop] is value
            child.visible = visible
-           console.log( 'reveal',  { name:child.name, prop:prop, value:value, visible:child.visible } )
+           # console.log( 'reveal',  { name:child.name, geom:child.geom, prop:prop, value:value, visible:child.visible } )
       group.traverse( reveal ) if group?
       return
 
@@ -289,9 +287,9 @@ class Muse
     f3.add( act, 'Encourage' ).onChange( encourage )
 
     f4 = gui.addFolder('Rotation')
-    f4.add( act, 'RotationX', -180, 180 ).onChange( () -> group.rotation.x = de2ra(act.RotationX) )
-    f4.add( act, 'RotationY', -180, 180 ).onChange( () -> group.rotation.y = de2ra(act.RotationY) )
-    f4.add( act, 'RotationZ', -180, 180 ).onChange( () -> group.rotation.z = de2ra(act.RotationZ) )
+    f4.add( act, 'RotationX', -180, 180 ).onChange( () => group.rotation.x = @deg2rad(act.RotationX) )
+    f4.add( act, 'RotationY', -180, 180 ).onChange( () => group.rotation.y = @deg2rad(act.RotationY) )
+    f4.add( act, 'RotationZ', -180, 180 ).onChange( () => group.rotation.z = @deg2rad(act.RotationZ) )
 
     f5 = gui.addFolder('Position');
     f5.add( act, 'PositionX', -500, 500 ).onChange( () -> group.position.x = act.PositionX )
@@ -332,7 +330,7 @@ class Muse
     mesh     = new THREE.Mesh(geometry, material)
     mesh.position.set(0, 0, 0)
     mesh.rotation.set(0, 0, 0)
-    mesh.rotation.y = de2ra(-90)
+    mesh.rotation.y = @deg2rad(-90)
     mesh.scale.set(1, 1, 1)
     mesh.doubleSided = true
     mesh.castShadow = true

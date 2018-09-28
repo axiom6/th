@@ -5,7 +5,7 @@ var Cube;
 
 Cube = (function() {
   class Cube {
-    constructor(plane, row, col1, title, xyz, whd, hsv, opacity) {
+    constructor(plane, row, col1, title, xyz, whd, hsv, opacity, font) {
       var box, col, dx, dy, face, mat, mats, obj, rgb, side, text;
       this.plane = plane;
       this.row = row;
@@ -15,6 +15,7 @@ Cube = (function() {
       this.whd = whd;
       this.hsv = hsv;
       this.opacity = opacity;
+      this.font = font;
       box = new THREE.BoxBufferGeometry();
       box.name = this.title;
       Cube.matrix.makeScale(this.whd[0], this.whd[1], this.whd[2]);
@@ -36,7 +37,7 @@ Cube = (function() {
       this.mesh.row = this.row;
       this.mesh.col = this.col;
       obj = {
-        font: Cube.Font,
+        font: this.font,
         size: 12,
         height: 6,
         curveSegments: 2
@@ -56,10 +57,11 @@ Cube = (function() {
       text.applyMatrix(Cube.matrix);
       this.tmesh = new THREE.Mesh(text, mats);
       this.tmesh.name = this.title;
-      this.mesh.geom = "Text";
+      this.tmesh.geom = "Text";
       this.tmesh.plane = this.plane;
       this.tmesh.row = this.row;
       this.tmesh.col = this.col;
+      this.mesh.add(this.tmesh);
     }
 
     colorRgb(rgb) {
@@ -67,10 +69,6 @@ Cube = (function() {
     }
 
   };
-
-  Cube.JSON = Build.syncJSON('webfonts/helvetiker_regular.typeface.json');
-
-  Cube.Font = new THREE.Font(Cube.JSON);
 
   Cube.matrix = new THREE.Matrix4();
 
