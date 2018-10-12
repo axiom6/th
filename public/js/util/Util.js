@@ -7,61 +7,6 @@ Util = (function() {
       this.dummy = "";
     }
 
-    // ------ Modules ------
-    /*
-    Util.module     =  if window['module']? then window['module'] else null
-    if Util.module? and typeof Util.module is "object" and typeof Util.module.exports  is "object"
-      Util.isCommonJS = true
-    else
-      Util.isWebPack  = true
-
-    @init:( moduleCommonJS=undefined, moduleWebPack=undefined, root='../../'  ) ->
-      Util.root   = root
-      Util.rootJS = Util.root + 'js/'
-      Util.resetModuleExports()
-      Util.fixTestGlobals()
-      if     Util.isCommonJS and moduleCommonJS?
-        require( moduleCommonJS )
-      else if Util.isWebPack and moduleWebPack?
-        Util.skipReady = true
-        Util.loadScript( moduleWebPack )
-      else
-        console.error( """Bad arguments for Util.init() isCommonJS=#{Util.isCommonJS},
-          root=#{root}, moduleCommonJS=#{moduleCommonJS?}, moduleWebPack=#{moduleWebPack}""" )
-      return
-
-    @initJasime:() ->
-      Util.resetModuleExports()
-      if not Util.isCommonJS
-        window.require = Util.loadScript
-      else
-        Util.fixTestGlobals()
-        window.exports        = Util.module.exports
-        window.jasmineRequire = window.exports
-      return
-
-     * Use to to prevent dynamic resolve in webpack where Util is not included
-     * Need require for WebPath. For now can only warn
-    @require:( path ) ->
-      if Util.isCommonJS
-        require( path )
-      else
-        Util.warn( 'Util.require may not work with WebPack', path )
-        require( path )
-
-    @fixTestGlobals:() ->
-      window.Util           = Util
-      window.xUtil          = Util
-
-    @resetModuleExports:() ->
-      if Util.isCommonJS
-         Util.module = require('module')
-         Util.module.globalPaths.push("/Users/ax/Documents/prj/ui/")
-         #window.global = window
-         #console.log( "Node Module Paths", Util.module.globalPaths )
-      return
-
-     */
     static loadScript(path, fn) {
       var head, script;
       head = document.getElementsByTagName('head')[0];
@@ -84,6 +29,12 @@ Util = (function() {
       } else {
         document.addEventListener('DOMContentLoaded', fn, false);
       }
+    }
+
+    static isChild(key) {
+      var a;
+      a = key.charAt(0);
+      return a === a.toUpperCase() && a !== '$';
     }
 
     // ---- Inquiry ----
@@ -273,6 +224,15 @@ Util = (function() {
       var obj;
       obj = JSON.parse(json);
       console.log(obj);
+    }
+
+    static jQueryHasNotBeenLoaded() {
+      if (typeof jQuery === 'undefined') {
+        console.error('Util JQuery has not been loaded');
+        return true;
+      } else {
+        return false;
+      }
     }
 
     // ------ Validators ------
@@ -581,21 +541,6 @@ Util = (function() {
       }
     }
 
-    /*
-      parse = document.createElement('a')
-      parse.href =  "http://example.com:3000/dir1/dir2/file.ext?search=test#hash"
-      parse.protocol  "http:"
-      parse.hostname  "example.com"
-      parse.port      "3000"
-      parse.pathname  "/dir1/dir2/file.ext"
-      parse.segments  ['dir1','dir2','file.ext']
-      parse.fileExt   ['file','ext']
-      parse.file       'file'
-      parse.ext        'ext'
-      parse.search    "?search=test"
-      parse.hash      "#hash"
-      parse.host      "example.com:3000"
-    */
     static pdfCSS(href) {
       var link;
       if (!window.location.search.match(/pdf/gi)) {
@@ -608,6 +553,21 @@ Util = (function() {
       document.getElementsByTagName('head')[0].appendChild(link);
     }
 
+    /*
+    parse = document.createElement('a')
+    parse.href =  "http://example.com:3000/dir1/dir2/file.ext?search=test#hash"
+    parse.protocol  "http:"
+    parse.hostname  "example.com"
+    parse.port      "3000"
+    parse.pathname  "/dir1/dir2/file.ext"
+    parse.segments  ['dir1','dir2','file.ext']
+    parse.fileExt   ['file','ext']
+    parse.file       'file'
+    parse.ext        'ext'
+    parse.search    "?search=test"
+    parse.hash      "#hash"
+    parse.host      "example.com:3000"
+    */
     static parseURI(uri) {
       var a, j, len1, name, nameValue, nameValues, parse, value;
       parse = {};

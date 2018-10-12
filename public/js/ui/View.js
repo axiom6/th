@@ -325,7 +325,7 @@ View = class View {
     for (pkey in specs) {
       if (!hasProp.call(specs, pkey)) continue;
       pspec = specs[pkey];
-      if (!(UI.isChild(pkey))) {
+      if (!(Util.isChild(pkey))) {
         continue;
       }
       pane = new Pane(this.ui, this.stream, this, pspec);
@@ -346,7 +346,7 @@ View = class View {
     for (gkey in specs) {
       if (!hasProp.call(specs, gkey)) continue;
       gspec = specs[gkey];
-      if (!(UI.isChild(gkey))) {
+      if (!(Util.isChild(gkey))) {
         continue;
       }
       gpanes = this.createPanes(gspec);

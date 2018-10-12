@@ -59,19 +59,31 @@
     "Embrace":{  "name":"Embrace", "book":"doc/book/muse/1.Concepts/",
       "west":"","east":"Innovate","icon":"fa-link","css":"ikw-col","cells":[1,12,1,36],"dells":[1,12,1,48],"intent":"SelectCol",
       "w":107,"fab":"Feature","plan":"Tactics","dimensions":["Behavior"],
-            "cube":{ "x":20, "convey":"west", "xc":40, "hsc":{"h":90,"s":60,"v":90} }
+            "cube":{ "x":20, "convey":"west", "xc":40, "hsc":{"h":90,"s":60,"v":90} },
+      "Info": { "west":"Reach",   "north":"Purpose", "east":"Interact", "south":"Action" },
+      "Know": { "west":"Involve", "north":"Present", "east":"Inform",   "south":"Enact"  },
+      "Wise": { "west":"Touch",   "north":"Earnest", "east":"Effect",   "south":"Unify"  }
     },
     "Innovate":{  "name":"Innovate", "book":"doc/book/muse/1.Concepts/",
       "west":"Embrace","east":"Encourage","icon":"fa-bolt","css":"ikw-col","cells":[13,12,1,36],"dells":[13,12,1,48],"intent":"SelectCol",
       "w":96,"fab":"Advantage","plan":"Execute","dimensions":["People","Service","Data","Network"],
-            "cube":{ "x":60, "convey":"east", "xc":80, "hsc":{"h":0,"s":60,"v":90} }
+            "cube":{ "x":60, "convey":"east", "xc":80, "hsc":{"h":0,"s":60,"v":90} },
+      "Info": { "west":"People",     "north":"Function",  "east":"Data",      "south":"Distribute" },
+      "Know": { "west":"Proclaim",   "north":"Convert",   "east":"Invent",    "south":"Circulate"  },
+      "Wise": { "west":"Articulate", "north":"Enhance",   "east":"Structure", "south":"Originate"  }
     },
     "Encourage":{  "name":"Encourage", "book":"doc/book/muse/1.Concepts/",
       "west":"Innovate","east":"","icon":"fa-music","css":"ikw-col","cells":[25,12,1,36],"dells":[25,12,1,48],"intent":"SelectCol",
       "w":122,"fab":"Benefit","plan":"Strategy","dimensions":["Motivation"],
-            "cube":{ "x":100, "convey":"none", "xc":0, "hsc":{"h":0,"s":0,"v":0} }
+            "cube":{ "x":100, "convey":"none", "xc":0, "hsc":{"h":0,"s":0,"v":0} },
+      "Info": { "west":"Augment",  "north":"Oversee",    "east":"Reference", "south":"Accomplish" },
+      "Know": { "west":"Paradigm", "north":"Fairness",   "east":"Moral",     "south":"Reflect"    },
+      "Wise": { "west":"Affirm",   "north":"Foundation", "east":"Empathy",   "south":"Trancend"   }
     }
   },
+
+  "Hsv": { "Embrace":[195,90,60], "Innovate":[50,90,90], "Encourage":[20,50,90],
+    "west":[195,90,70], "north":[90,90,90], "east":[30,60,90], "south":[60,60,90] },
 
   "Concerns":{
     "Internal":  { "hsv":[210,70,70], "dir":"north", "dimension":"Behavior",   "zachman":"Time",       "muse":"Embrace"   },

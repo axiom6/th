@@ -186,14 +186,14 @@ Dom = (function() {
       th = spec.name === 'Roast' ? 18 : 13; // A hack
       $p = $(`<div   ${Dom.panel(0, 0, 100, 100)}></div>`);
       $p.append(`<h2 ${Dom.label(0, th, 10, 90)}>${spec.name}</h2>`);
-      n = Util.lenObject(spec, UI.isChild);
+      n = Util.lenObject(spec, Util.isChild);
       x = x0;
       y = y0;
       dx = (100 - x0) / n;
       for (key in spec) {
         if (!hasProp.call(spec, key)) continue;
         study = spec[key];
-        if (!(UI.isChild(key))) {
+        if (!(Util.isChild(key))) {
           continue;
         }
         src = study.icon != null ? imgDir + study.icon : null;
@@ -210,14 +210,14 @@ Dom = (function() {
       var $e, $p, dy, key, mh, n, src, study, x, y;
       $p = $(`<div    ${Dom.panel(0, 0, 100, 100, align)}></div>`);
       $p.append(`<div ${Dom.label(0, 3, 100, 10)}>${spec.name}</div>`);
-      n = Util.lenObject(spec, UI.isChild);
+      n = Util.lenObject(spec, Util.isChild);
       x = x0;
       y = y0;
       dy = (100 - y0 - 5) / n;
       for (key in spec) {
         if (!hasProp.call(spec, key)) continue;
         study = spec[key];
-        if (!(UI.isChild(key))) {
+        if (!(Util.isChild(key))) {
           continue;
         }
         src = study.icon != null ? imgDir + study.icon : null;
@@ -235,14 +235,14 @@ Dom = (function() {
       var $e, $p, back, dy, icon, iconc, key, mh, n, src, study, x, y;
       $p = $(`<div    ${Dom.panel(0, 0, 100, 100)}></div>`);
       $p.append(`<div ${Dom.label(0, 3, 100, 10)}>${spec.name}</div>`);
-      n = Util.lenObject(spec, UI.isChild);
+      n = Util.lenObject(spec, Util.isChild);
       x = x0;
       y = y0;
       dy = (100 - y0 - 5) / n;
       for (key in spec) {
         if (!hasProp.call(spec, key)) continue;
         study = spec[key];
-        if (!(UI.isChild(key))) {
+        if (!(Util.isChild(key))) {
           continue;
         }
         src = study.img != null ? imgDir + study.img : null;
@@ -282,14 +282,14 @@ Dom = (function() {
       var $e, $p, dy, key, n, study, x, y;
       $p = $(`<div    ${Dom.panel(0, 0, 100, 100, "left")}></div>`);
       $p.append(`<div ${Dom.label(0, 3, 100, 10)}>${name}</div>`);
-      n = Util.lenObject(spec, UI.isChild);
+      n = Util.lenObject(spec, Util.isChild);
       x = x0;
       y = y0;
       dy = (100 - y0) / n;
       for (key in spec) {
         if (!hasProp.call(spec, key)) continue;
         study = spec[key];
-        if (!(UI.isChild(key))) {
+        if (!(Util.isChild(key))) {
           continue;
         }
         $e = $(`${Dom.branch(x, y, 100, dy, study.name)}`);

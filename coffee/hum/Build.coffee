@@ -1,52 +1,22 @@
 
 class Build
 
-  Build.Muse = Build.syncJSON( 'json/Muse.json' )
-  Build.Info = Build.syncJSON( 'json/Info.json' )
-  Build.Know = Build.syncJSON( 'json/Know.json' )
-  Build.Wise = Build.syncJSON( 'json/Wise.json' )
+  Build.Keys = { Information:'Info', Knowledge:'Know', Wisdom:'Wise' }
 
-  Build.Keys = { Information:'Info', Augment:'Augm', DataScience:'Data', Knowledge:'Know', Wisdom:'Wise', Hues:'Hues' }
-
-  constructor:() ->
+  constructor:( @batch ) ->
+    @Muse = @batch.Muse.data
     @None       = { name:'None' }
-    @Rows       = @toRows(       Build.Muse.Rows    )
-    @Columns    = @toColumns(    Build.Muse.Columns )
-    @Planes     = @createPlanes( Build.Muse.Planes  )
+    @Rows       = @toRows(       @Muse.Rows    )
+    @Columns    = @toColumns(    @Muse.Columns )
+    @Planes     = @createPlanes( @Muse.Planes  )
     #@logAdjacentPractices()
 
-  @syncJSON:( path ) ->
-   jqxhr = $.ajax( { type:"GET", url:path, dataType:'json', cache:false, async:false } )
-   jqxhr['responseJSON']
-
   createPlanes:( planes ) ->
-    for key, plane of planes
-      plane['practices'] = @createPractices( key )
-      # console.log( 'Build.createPlanes()', plane )
+    for key, obj of @batch when key isnt 'Muse' and key isnt 'Font'
+      planes[key]['practices'] = {}
+      for prac, practice of obj.data
+         planes[key]['practices'][prac] = practice
     planes
-
-  isChild:( key ) ->
-      a = key.charAt(0)
-      a is a.toUpperCase()
-
-  createPractices:( key ) ->
-    practices    = {}
-    for pkey, practice of Build[key] when @isChild(pkey)
-      practice['name'] = pkey
-      practice.studies = {}
-      practices[practice.name] = practice # Use long form like Infomation instead of Info
-      for skey, study of practice  when @isChild(skey)
-        study['name']          = skey
-        study.topics           = {}
-        practice.studies[skey] = study
-        for tkey, topic of study  when @isChild(tkey)
-          topic['name']      = tkey
-          topic.items        = {}
-          study.topics[tkey] = topic
-          for ikey, item of topic when @isChild(ikey)
-            item['name']       = ikey
-            topic.items[ikey]  = item
-    practices
 
   combine:() ->
     obj = {}

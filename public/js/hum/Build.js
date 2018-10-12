@@ -3,84 +3,34 @@ var Build,
 
 Build = (function() {
   class Build {
-    constructor() {
+    constructor(batch) {
+      this.batch = batch;
+      this.Muse = this.batch.Muse.data;
       this.None = {
         name: 'None'
       };
-      this.Rows = this.toRows(Build.Muse.Rows);
-      this.Columns = this.toColumns(Build.Muse.Columns);
-      this.Planes = this.createPlanes(Build.Muse.Planes);
+      this.Rows = this.toRows(this.Muse.Rows);
+      this.Columns = this.toColumns(this.Muse.Columns);
+      this.Planes = this.createPlanes(this.Muse.Planes);
     }
 
     //@logAdjacentPractices()
-    static syncJSON(path) {
-      var jqxhr;
-      jqxhr = $.ajax({
-        type: "GET",
-        url: path,
-        dataType: 'json',
-        cache: false,
-        async: false
-      });
-      return jqxhr['responseJSON'];
-    }
-
     createPlanes(planes) {
-      var key, plane;
-      for (key in planes) {
-        plane = planes[key];
-        plane['practices'] = this.createPractices(key);
-      }
-      // console.log( 'Build.createPlanes()', plane )
-      return planes;
-    }
-
-    isChild(key) {
-      var a;
-      a = key.charAt(0);
-      return a === a.toUpperCase();
-    }
-
-    createPractices(key) {
-      var ikey, item, pkey, practice, practices, ref, skey, study, tkey, topic;
-      practices = {};
-      ref = Build[key];
-      for (pkey in ref) {
-        practice = ref[pkey];
-        if (!(this.isChild(pkey))) {
+      var key, obj, prac, practice, ref, ref1;
+      ref = this.batch;
+      for (key in ref) {
+        obj = ref[key];
+        if (!(key !== 'Muse' && key !== 'Font')) {
           continue;
         }
-        practice['name'] = pkey;
-        practice.studies = {};
-        practices[practice.name] = practice; // Use long form like Infomation instead of Info
-        for (skey in practice) {
-          study = practice[skey];
-          if (!(this.isChild(skey))) {
-            continue;
-          }
-          study['name'] = skey;
-          study.topics = {};
-          practice.studies[skey] = study;
-          for (tkey in study) {
-            topic = study[tkey];
-            if (!(this.isChild(tkey))) {
-              continue;
-            }
-            topic['name'] = tkey;
-            topic.items = {};
-            study.topics[tkey] = topic;
-            for (ikey in topic) {
-              item = topic[ikey];
-              if (!(this.isChild(ikey))) {
-                continue;
-              }
-              item['name'] = ikey;
-              topic.items[ikey] = item;
-            }
-          }
+        planes[key]['practices'] = {};
+        ref1 = obj.data;
+        for (prac in ref1) {
+          practice = ref1[prac];
+          planes[key]['practices'][prac] = practice;
         }
       }
-      return practices;
+      return planes;
     }
 
     combine() {
@@ -312,21 +262,10 @@ Build = (function() {
 
   };
 
-  Build.Muse = Build.syncJSON('json/Muse.json');
-
-  Build.Info = Build.syncJSON('json/Info.json');
-
-  Build.Know = Build.syncJSON('json/Know.json');
-
-  Build.Wise = Build.syncJSON('json/Wise.json');
-
   Build.Keys = {
     Information: 'Info',
-    Augment: 'Augm',
-    DataScience: 'Data',
     Knowledge: 'Know',
-    Wisdom: 'Wise',
-    Hues: 'Hues'
+    Wisdom: 'Wise'
   };
 
   return Build;

@@ -1,4 +1,5 @@
 `import Util  from '../util/Util.js'`
+`import Data  from '../util/Data.js'`
 `import Vis   from '../vis/Vis.js'`
 `import Cube  from '../hum/Cube.js'`
 `import Rect  from '../hum/Rect.js'`
@@ -6,15 +7,27 @@
 `import Act   from '../hum/Act.js'`
 `import Gui   from '../hum/Gui.js'`
 
-
-Util.ready ->
-  @muse = new Muse()
-  @muse.animate()
-  return
-
 class Muse
 
-  constructor:() ->
+  Data.local  = "http://localhost:63342/th/public/"
+  Data.hosted = "https://ui-48413.firebaseapp.com/"
+  @FontUrl    = "webfonts/helvetiker_regular.typeface.json"
+  @Batch =
+    Muse: { url:'json/Muse.json', data:null, isPrac:false }
+    Info: { url:'json/Info.json', data:null, isPrac:true  }
+    Know: { url:'json/Know.json', data:null, isPrac:true  }
+    Wise: { url:'json/Wise.json', data:null, isPrac:true  }
+    Font: { url:Muse.FontUrl,     data:null, isPrac:false }
+
+  Data.batchRead( Muse.Batch, Muse.init )
+
+  @init:( batch ) ->
+    Util.ready ->
+      muse = new Muse( batch )
+      muse.animate()
+      return
+
+  constructor:( @batch ) ->
 
     [@screenWidth,@screenHeight,@aspectRatio] = @resizeScreen()
     @ikwElem = document.getElementById('Ikw')
@@ -36,12 +49,12 @@ class Muse
     @axes = new THREE.AxesHelper( 2 )
     @scene.add( @axes )
 
-    @fontJSON = Build.syncJSON( 'webfonts/helvetiker_regular.typeface.json' )
-    @fontPrac = new THREE.Font( @fontJSON )
+    # @fontJSON = Data.syncJSON( 'webfonts/helvetiker_regular.typeface.json' )
+    @fontPrac = new THREE.Font( @batch.Font.data )
 
     #@faces()
     #@ground()
-    @group = @ikw()
+    @group = @ikw( @batch )
     @lights()
     [@gui,@act] = @ui( @group )
 
@@ -59,7 +72,7 @@ class Muse
        @camera.aspect = @aspectRatio
        @camera.updateProjectionMatrix();
        @renderer.setSize( @screenWidth, @screenHeight )
-    console.log( "resizeScreen", { width:@screenWidth, height:@screenHeight } )
+    #console.log( "resizeScreen", { width:@screenWidth, height:@screenHeight } )
     [@screenWidth,@screenHeight,@aspectRatio]
 
   space:() ->
@@ -90,9 +103,9 @@ class Muse
     sp.sy            = { center:0, west:0,      north:sp.sh, east:0,     south:-sp.sh }
     sp
 
-  ikw: () ->
+  ikw: ( batch ) ->
     sp    = @space()
-    build = new Build()
+    build = new Build( batch )
     group = new THREE.Group()
     for plane   in [ { name:'Information', z:sp.z1 }, { name:'Knowledge', z:sp.z2 }, { name:'Wisdom',   z:sp.z3 } ]
       for row   in [ { name:'Learn',       y:sp.y1 }, { name:'Do',        y:sp.y2 }, { name:'Share',    y:sp.y3 } ]

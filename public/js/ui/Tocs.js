@@ -32,7 +32,7 @@ Tocs = (function() {
       for (keyPrac in practices) {
         if (!hasProp.call(practices, keyPrac)) continue;
         practice = practices[keyPrac];
-        if (!(UI.isChild(keyPrac))) {
+        if (!(Util.isChild(keyPrac))) {
           continue;
         }
         hasChild = this.hasChild(practice);
@@ -40,7 +40,7 @@ Tocs = (function() {
         for (keyStudy in practice) {
           if (!hasProp.call(practice, keyStudy)) continue;
           study = practice[keyStudy];
-          if (hasChild && UI.isChild(keyStudy)) {
+          if (hasChild && Util.isChild(keyStudy)) {
             this.enrichSpec(keyStudy, study, specs, 2, practice, false, false);
           }
         }
@@ -59,7 +59,7 @@ Tocs = (function() {
       for (key in spec) {
         if (!hasProp.call(spec, key)) continue;
         child = spec[key];
-        if (UI.isChild(key)) {
+        if (Util.isChild(key)) {
           return true;
         }
       }
