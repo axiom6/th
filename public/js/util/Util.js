@@ -503,11 +503,8 @@ Util = (function() {
       return s5;
     }
 
-    static toName1(s1) {
-      var s2, s3;
-      s2 = s1.replace('_', ' ');
-      s3 = s2.replace(/([A-Z][a-z])/g, ' $1');
-      return s3.substring(1);
+    static toAlpha(s1) {
+      return s1.replace(/\W/g, '');
     }
 
     static indent(n) {

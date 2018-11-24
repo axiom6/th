@@ -166,7 +166,6 @@ View = class View {
     ref = this.panes;
     for (k = 0, len = ref.length; k < len; k++) {
       pane = ref[k];
-      pane.intent = select.intent;
       pane.reset(select);
     }
   }
@@ -253,7 +252,6 @@ View = class View {
         pane = ref[k];
         pane.show();
         [left, top, width, height] = this.positionPane(pane.cells, pane.spec, this.wscale, this.hscale);
-        pane.intent = select.intent;
         pane.animate(left, top, width, height, select, true, callback);
       }
     } else {
@@ -273,7 +271,6 @@ View = class View {
     this.hideAll();
     pane.resetStudiesDir(true);
     pane.show();
-    pane.intent = select.intent;
     pane.animate(this.margin.west, this.margin.north, 100 * this.wview, 100 * this.hview, select, true, paneCallback);
     this.show();
     this.lastPaneName = pane.name;

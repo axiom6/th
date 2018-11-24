@@ -15,6 +15,8 @@ UI = (function() {
       this.specs = specs;
       this.navbs = navbs;
       this.pages = {};
+      this.cname = 'Study';
+      this.$text = UI.$empty;
       if (this.navbs != null) {
         this.navb = new Navb(this, this.stream, this.navbs);
       }
@@ -43,6 +45,7 @@ UI = (function() {
 
     pagesReady(cname, append = true) {
       var name, page, pane, ref;
+      this.cname = cname;
       ref = this.pages;
       for (name in ref) {
         if (!hasProp.call(ref, name)) continue;
@@ -58,7 +61,7 @@ UI = (function() {
             pane.$.append(page.$pane);
           }
         } else {
-          page.ready(cname);
+          page.$pane = page.ready(cname);
         }
       }
     }
@@ -196,7 +199,6 @@ UI = (function() {
     hStudy: 0.5
   };
 
-  //I.margin  =  { width:0.00, height:0.00, west:0.5, north :0, east :0.5, south:0, wStudy:0.5, hStudy:0.5 }
   UI.SelectView = 'SelectView';
 
   UI.SelectPane = 'SelectPane';
