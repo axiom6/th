@@ -1,13 +1,13 @@
 
 `import Util  from '../util/Util.js'`
 `import Vis   from '../vis/Vis.js'`
-`import Build from '../mbox/Build.js'`
+`import Build from '../hum/Build.js'`
 
 class IKW
 
-  constructor:( @mbox, @coord, @color, @width, @height, @depth ) ->
+  constructor:( @mbox, @batch, @coord, @color, @width, @height, @depth ) ->
     @mathbox  = @mbox.mathbox
-    @build    = new Build()
+    @build    = new Build( @batch )
     @ni       = 0
     @nt       = 4
 

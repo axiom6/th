@@ -1,21 +1,22 @@
 import Util  from '../util/Util.js';
 import Vis   from '../vis/Vis.js';
-import Build from '../mbox/Build.js';
+import Build from '../hum/Build.js';
 var IKW;
 
 IKW = class IKW {
-  constructor(mbox, coord, color, width, height, depth) {
+  constructor(mbox, batch, coord, color, width, height, depth) {
     // {style: {border: '4px dashed rgba(192, 32, 48, .5)', color: 'rgba(96, 16, 32, 1)', background: 'rgba(255, 255, 255, .75)'}},
     this.flotExpr = this.flotExpr.bind(this);
     this.viewArrays = this.viewArrays.bind(this);
     this.mbox = mbox;
+    this.batch = batch;
     this.coord = coord;
     this.color = color;
     this.width = width;
     this.height = height;
     this.depth = depth;
     this.mathbox = this.mbox.mathbox;
-    this.build = new Build();
+    this.build = new Build(this.batch);
     this.ni = 0;
     this.nt = 4;
   }

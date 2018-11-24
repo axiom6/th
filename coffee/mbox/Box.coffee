@@ -1,5 +1,6 @@
 
 `import Util     from '../util/Util.js'`
+`import Data     from '../util/Data.js'`
 `import Vis      from '../vis/Vis.js'`
 `import MBox     from '../mbox/MBox.js'`
 `import Coord    from '../mbox/Coord.js'`
@@ -40,13 +41,24 @@ class  Box
     coord.cylVolume(  view, Vis.toRgbHsv )
     coord.cylSurface( view, Vis.toRgbHsv, mbox.sin06F )
 
-  @doIKW:( MBox ) ->
+  @initIKW:() ->
     mbox  = new MBox()
     coord = new Coord( mbox, 3, 3, 3 )
     color = new Color( mbox )
-    ikw   = new IKW(   mbox, coord, color, 3, 3, 3 )
+    ikw   = new IKW(   mbox, Box.Batch, coord, color, 3, 3, 3 )
     view  = ikw.museCartesian()
     ikw.viewArrays( view )
+
+  @doIKW:( ) ->
+    Box.Batch =
+      Muse: { url:'json/Muse.json', data:null, isPrac:false }
+      Info: { url:'json/Info.json', data:null, isPrac:true  }
+      Know: { url:'json/Know.json', data:null, isPrac:true  }
+      Wise: { url:'json/Wise.json', data:null, isPrac:true  }
+
+    Data.hosted = "https://ui-48413.firebaseapp.com/";
+    Data.local  = "http://localhost:63342/th/public/";
+    Data.batchRead( Box.Batch, Box.initIKW )
 
   @doRegress:( MBox ) ->
     mbox     = new MBox()
