@@ -1,7 +1,8 @@
 import Util  from '../util/Util.js';
 import UI    from '../ui/UI.js';
+import Dom   from '../ui/Dom.js';
 import Pane  from '../ui/Pane.js';
-import Pack from '../ui/Pack.js';
+import Pack  from '../ui/Pack.js';
 var View,
   hasProp = {}.hasOwnProperty;
 
@@ -18,12 +19,13 @@ View = class View {
     this.nrow = UI.nrow;
     this.classPrefix = Util.isStr(this.specs.css) ? this.spec.css : 'ui-view';
     [this.wpane, this.hpane, this.wview, this.hview, this.wscale, this.hscale] = this.percents(this.nrow, this.ncol, this.margin);
-    [this.packs, this.panes] = UI.hasPack ? this.createPacks(this.specs) : this.createPanes(this.specs);
+    [this.packs, this.panes] = this.createPacksPanes(this.specs);
     this.sizeCallback = null;
     this.paneCallback = null;
     this.lastPaneName = '';
     this.$empty = UI.$empty; // Empty jQuery singleton for intialization
     this.allCells = [1, this.ncol, 1, this.nrow];
+    [this.wpx, this.hpx] = [0, 0];
   }
 
   ready() {
@@ -38,6 +40,7 @@ View = class View {
       pane.ready();
     }
     this.subscribe();
+    [this.wpx, this.hpx] = this.size();
   }
 
   subscribe() {
@@ -85,20 +88,31 @@ View = class View {
     return n * this.hpane + (n - 1) * this.margin.height / this.hscale;
   }
 
-  widthpx() {
-    return this.$view.innerWidth(); // Use @viewp because
-  }
-
-  heightpx() {
-    return this.$view.innerHeight(); // Use @viewp because @$view
+  size() {
+    var hpx, isViewHidden, wpx;
+    isViewHidden = Dom.isHidden(this.$view);
+    if (isViewHidden) {
+      this.show();
+    }
+    [wpx, hpx] = [this.$view.innerWidth(), this.$view.innerHeight()];
+    if (Util.isNum(wpx) && Util.isNum(hpx)) {
+      [this.wpx, this.hpx] = [wpx, hpx];
+    } else {
+      console.error("View.size() wpx hpx undefined and kept at ready size");
+      console.trace();
+    }
+    if (isViewHidden) {
+      this.hide();
+    }
+    return [this.wpx, this.hpx];
   }
 
   wPanes() {
-    return this.wview * this.widthpx();
+    return this.wview * this.wpx;
   }
 
   hPanes() {
-    return this.hview * this.heightpx();
+    return this.hview * this.hpx;
   }
 
   north(top, height, h, scale = 1.0, dy = 0) {
@@ -155,10 +169,11 @@ View = class View {
     return [left, top, width, height];
   }
 
+  // Should only be called when view is fully visible
   positionpx(j, m, i, n, spec) {
     var height, left, top, width;
     [left, top, width, height] = this.position(j, m, i, n, spec, this.wscale, this.hscale);
-    return [width * this.widthpx() / 100, height * this.heightpx() / 100];
+    return [width * this.wpx / 100, height * this.hpx / 100];
   }
 
   reset(select) {
@@ -198,12 +213,11 @@ View = class View {
     this.$view.hide();
   }
 
-  showAll() {
-    var k, len, pane, ref;
+  showAll(panes) {
+    var k, len, pane;
     this.$view.hide();
-    ref = this.panes;
-    for (k = 0, len = ref.length; k < len; k++) {
-      pane = ref[k];
+    for (k = 0, len = panes.length; k < len; k++) {
+      pane = panes[k];
       //@reset( @selectView )
       pane.show();
     }
@@ -240,23 +254,24 @@ View = class View {
   expandAllPanes(select) {
     this.hideAll();
     this.reset(select);
-    return this.showAll();
+    return this.showAll(this.panes);
   }
 
   expandPack(select, pack, callback = null) {
     var height, k, left, len, pane, ref, top, width;
+    // console.log( 'View.expandPack()', pack.name, @ui.okPub(pack.spec) )
     this.hideAll('Interact');
     if (pack.panes != null) {
       ref = pack.panes;
       for (k = 0, len = ref.length; k < len; k++) {
         pane = ref[k];
         pane.show();
-        [left, top, width, height] = this.positionPane(pane.cells, pane.spec, this.wscale, this.hscale);
+        [left, top, width, height] = this.positionUnionPane(pack.cells, pane.cells, pane.spec, this.wscale, this.hscale);
         pane.animate(left, top, width, height, select, true, callback);
       }
-    } else {
-      console.error('View.expandPack pack.panes null');
     }
+    // else
+    //   console.error( 'View.expandPack pack.panes null' )
     this.show();
     this.lastPaneName = 'None';
   }
@@ -315,43 +330,41 @@ View = class View {
     return null;
   }
 
-  createPanes(specs) {
-    var pane, panes, pkey, pspec;
-    panes = [];
-// and not ( pspec.show? and not pspec.show )
-    for (pkey in specs) {
-      if (!hasProp.call(specs, pkey)) continue;
-      pspec = specs[pkey];
-      if (!(Util.isChild(pkey))) {
-        continue;
-      }
-      pane = new Pane(this.ui, this.stream, this, pspec);
-      panes.push(pane);
-    }
-    //console.log( 'View.createPanes()', panes )
-    if (UI.hasPack) {
-      return panes;
-    } else {
-      return [[], panes];
-    }
-  }
-
-  createPacks(specs) {
-    var gkey, gpanes, gspec, pack, packs, panes;
+  createPacksPanes(specs) {
+    var key, pack, packs, pane, panes, pey, ppec, spec;
     packs = [];
     panes = [];
-    for (gkey in specs) {
-      if (!hasProp.call(specs, gkey)) continue;
-      gspec = specs[gkey];
-      if (!(Util.isChild(gkey))) {
-        continue;
+    for (key in specs) {
+      if (!hasProp.call(specs, key)) continue;
+      spec = specs[key];
+      if (Util.isChild(key)) {
+        if (this.isPack(spec)) {
+          pack = new Pack(this.ui, this.stream, this, spec);
+          packs.push(pack);
+          for (pey in spec) {
+            if (!hasProp.call(spec, pey)) continue;
+            ppec = spec[pey];
+            if (!(Util.isChild(pey))) {
+              continue;
+            }
+            pane = new Pane(this.ui, this.stream, this, ppec);
+            pack.panes.push(pane);
+            panes.push(pane);
+          }
+        } else if (this.isPane(spec)) {
+          panes.push(new Pane(this.ui, this.stream, this, spec));
+        }
       }
-      gpanes = this.createPanes(gspec);
-      pack = new Pack(this.ui, this.stream, this, gspec, gpanes);
-      packs.push(pack);
-      Array.prototype.push.apply(panes, gpanes);
     }
     return [packs, panes];
+  }
+
+  isPane(spec) {
+    return (spec.type == null) || spec.type === 'Pane';
+  }
+
+  isPack(spec) {
+    return (spec.type != null) || spec.type === 'Pack';
   }
 
   paneInUnion(paneCells, unionCells) {

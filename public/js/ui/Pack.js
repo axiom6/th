@@ -4,9 +4,9 @@ import Pane    from '../ui/Pane.js';
 var Pack;
 
 Pack = class Pack extends Pane {
-  constructor(ui, stream, view, spec, panes) {
+  constructor(ui, stream, view, spec) {
     super(ui, stream, view, spec);
-    this.panes = panes;
+    this.panes = []; // Created and pushed by view.createPacksPanes()
     this.margin = this.view.margin;
     this.icon = this.spec.icon;
     this.css = Util.isStr(this.spec.css) ? this.spec.css : 'ui-pack';
@@ -19,35 +19,34 @@ Pack = class Pack extends Pane {
 
   ready() {
     var select;
+    if (this.spec.type === "pack3by3") {
+      return;
+    }
     this.htmlId = this.id(this.name, 'Pack');
     this.$icon = this.createIcon();
     this.view.$view.append(this.$icon);
     select = UI.toTopic(this.name, 'Pack', this.spec.intent);
-    return this.stream.publish('Select', select, this.$icon, 'click');
+    this.stream.publish('Select', select, this.$icon, 'click');
   }
 
   static show() {
-    var i, len, pane, ref, results;
+    var i, len, pane, ref;
     super.show();
     ref = this.panes;
-    results = [];
     for (i = 0, len = ref.length; i < len; i++) {
       pane = ref[i];
-      results.push(pane.show());
+      pane.show();
     }
-    return results;
   }
 
   static hide() {
-    var i, len, pane, ref, results;
+    var i, len, pane, ref;
     super.hide();
     ref = this.panes;
-    results = [];
     for (i = 0, len = ref.length; i < len; i++) {
       pane = ref[i];
-      results.push(pane.hide());
+      pane.hide();
     }
-    return results;
   }
 
   createIcon() {

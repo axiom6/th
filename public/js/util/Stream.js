@@ -75,7 +75,7 @@ Stream = class Stream {
     var bundle;
     bundle = this.getBundle(name, false);
     bundle.subscribers[source] = bundle.subject.subscribe(next, onError, onComplete);
-    if (this.isInfo(name)) {
+    if (this.infoSpec.onInit && this.isInfo(name)) {
       console.info('Strean.subscribe()', {
         subject: name,
         subscriber: source
@@ -91,7 +91,7 @@ Stream = class Stream {
       subject = this.getBundle(name).subject;
       subject.next(topic);
     }
-    if (this.isInfo(name)) {
+    if (this.infoSpec.onInit && this.isInfo(name)) {
       console.info('Strean.publish()', {
         subject: name,
         topic: topic
@@ -144,7 +144,7 @@ Stream = class Stream {
         subscriber: source
       });
     }
-    if (this.infoSpec.subscribe && this.inInfo(name)) {
+    if (this.infoSpec.onInit && this.infoSpec.subscribe && this.inInfo(name)) {
       console.info('Strean.unsubscribe()', {
         subject: name,
         subscriber: source

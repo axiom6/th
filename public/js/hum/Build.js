@@ -16,20 +16,15 @@ Build = (function() {
 
     //@logAdjacentPractices()
     createPlanes(planes) {
-      var key, obj, prac, practice, ref, ref1;
+      var key, obj, ref;
       ref = this.batch;
       for (key in ref) {
         obj = ref[key];
-        if (!(key !== 'Muse' && key !== 'Font')) {
-          continue;
-        }
-        planes[key]['practices'] = {};
-        ref1 = obj.data;
-        for (prac in ref1) {
-          practice = ref1[prac];
-          planes[key]['practices'][prac] = practice;
+        if (obj.type !== 'Spec') {
+          planes[key]['practices'] = obj.data[key];
         }
       }
+      // console.log( 'Build.createPlanes()', planes )
       return planes;
     }
 
@@ -113,17 +108,9 @@ Build = (function() {
     }
 
     getPractices(name) {
-      var key, plane, ref;
-      ref = this.Planes;
-      for (key in ref) {
-        if (!hasProp.call(ref, key)) continue;
-        plane = ref[key];
-        if (plane.name === name) {
-          return this.Planes[key].practices;
-        }
-      }
-      console.error('Build.getPractices(name) unknown plane with', name, 'returning Info practices');
-      return this.Planes['Info'].practices;
+      var key;
+      key = Build.Keys[name] != null ? Build.Keys[name] : name;
+      return this.Planes[key].practices;
     }
 
     getPractice(plane, row, column) {

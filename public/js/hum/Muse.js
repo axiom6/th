@@ -22,6 +22,7 @@ Muse = (function() {
       this.resizeScreen = this.resizeScreen.bind(this);
       this.animate = this.animate.bind(this);
       this.batch = batch1;
+      // console.log( @batch.Info.data )
       [this.screenWidth, this.screenHeight, this.aspectRatio] = this.resizeScreen();
       this.ikwElem = document.getElementById('Ikw');
       this.scene = new THREE.Scene();
@@ -636,27 +637,32 @@ Muse = (function() {
     Muse: {
       url: 'json/Muse.json',
       data: null,
-      isPrac: false
+      type: 'Spec'
     },
     Info: {
       url: 'json/Info.json',
       data: null,
-      isPrac: true
+      type: 'Pack'
     },
     Know: {
       url: 'json/Know.json',
       data: null,
-      isPrac: true
+      type: 'Pack'
     },
     Wise: {
       url: 'json/Wise.json',
       data: null,
-      isPrac: true
+      type: 'Pack'
+    },
+    Tops: {
+      url: 'json/Tops.json',
+      data: null,
+      type: 'Spec'
     },
     Font: {
       url: Muse.FontUrl,
       data: null,
-      isPrac: false
+      type: 'Spec'
     }
   };
 

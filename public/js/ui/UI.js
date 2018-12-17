@@ -66,6 +66,7 @@ UI = (function() {
       }
     }
 
+    // console.log( 'UI.pagesReady()', name )
     html() {
       var htm;
       htm = "";
@@ -74,9 +75,6 @@ UI = (function() {
       }
       if (UI.hasLays || (this.navbs != null)) {
         htm += `<div class="layout-corp"      id="${this.htmlId('Corp')}"></div>`;
-      }
-      if (UI.hasLays && UI.dims) {
-        htm += `<div class="layout-dims"      id="${this.htmlId('Dims')}"></div>`;
       }
       if (UI.hasLays) {
         htm += `<div class="layout-find"      id="${this.htmlId('Find')}"></div>`;
@@ -135,6 +133,23 @@ UI = (function() {
       return ($elem != null) && ($elem.length != null) && $elem.length > 0;
     }
 
+    okPub(spec) {
+      return !((spec['pub'] != null) && !spec['pub']);
+    }
+
+    toPlane(name) {
+      switch (name) {
+        case 'Information':
+          return 'Info';
+        case 'Knowledge':
+          return 'Know';
+        case 'Wisdom':
+          return 'Wise';
+        default:
+          return name;
+      }
+    }
+
     static nrowncol(data) {
       Util.noop(data);
       UI.nrow = 4; // if data.nrow? then data.nrow else UI.nrow
@@ -174,8 +189,6 @@ UI = (function() {
 
   };
 
-  UI.hasPack = true;
-
   UI.hasTocs = true;
 
   UI.hasLays = true;
@@ -186,20 +199,22 @@ UI = (function() {
 
   UI.nrow = 36;
 
-  UI.dims = false;
-
   UI.margin = {
     width: 1,
     height: 1,
-    west: 2,
+    west: 1,
     north: 1,
-    east: 2,
-    south: 2,
+    east: 1,
+    south: 1,
     wStudy: 0.5,
     hStudy: 0.5
   };
 
+  UI.SelectPlane = 'SelectPlane';
+
   UI.SelectView = 'SelectView';
+
+  UI.SelectPack = 'SelectPack';
 
   UI.SelectPane = 'SelectPane';
 
@@ -213,13 +228,11 @@ UI = (function() {
 
   UI.SelectCol = 'SelectCol';
 
-  UI.SelectPack = 'SelectPack';
-
   UI.AddChoice = 'AddChoice';
 
   UI.DelChoice = 'DelChoice';
 
-  UI.intents = [UI.SelectPane, UI.SelectView, UI.SelectStudy, UI.SelectRow, UI.SelectCol, UI.SelectPack, UI.AddChoice, UI.DelChoice];
+  UI.intents = [UI.SelectPlane, UI.SelectPane, UI.SelectPack, UI.SelectView, UI.SelectStudy, UI.SelectRow, UI.SelectCol, UI.AddChoice, UI.DelChoice];
 
   return UI;
 

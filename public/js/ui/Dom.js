@@ -324,6 +324,10 @@ Dom = (function() {
       $.css(Util.toPositionPc(array));
     }
 
+    static isHidden($e) {
+      return $e.css('display') === 'none';
+    }
+
   };
 
   Dom.choiceColor = "yellow";

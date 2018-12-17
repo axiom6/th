@@ -42,7 +42,7 @@ Data = (function() {
       };
       settings.success = (data, status, jqXHR) => {
         Util.noop(status, jqXHR);
-        obj['data'] = obj.isPrac ? Data.createPracs(data) : data;
+        obj['data'] = Data.create(data, obj.type, batch);
         if (Data.batchComplete(batch)) {
           return callback(batch);
         }
@@ -120,8 +120,36 @@ Data = (function() {
 
     
     // ---- Practices ----
-    static createPracs(data) {
-      var ikey, item, pkey, practice, skey, study, tkey, topic;
+    static create(data, type, batch = void 0) {
+      switch (type) {
+        case 'Pack':
+          return Data.createPacks(data, batch);
+        case 'Prac':
+          return Data.createPracs(data, batch);
+        default:
+          return data;
+      }
+    }
+
+    static createPacks(data, batch = void 0) {
+      var gkey, pack;
+      for (gkey in data) {
+        pack = data[gkey];
+        if (!(Util.isChild(gkey))) {
+          continue;
+        }
+        if (pack['name'] == null) {
+          pack['name'] = gkey;
+        }
+        data[gkey] = pack;
+        pack.practices = {};
+        this.createPracs(pack, batch);
+      }
+      return data;
+    }
+
+    static createPracs(data, batch = void 0) {
+      var base, bkey, ikey, item, pkey, practice, skey, study, tkey, topic;
       for (pkey in data) {
         practice = data[pkey];
         if (!(Util.isChild(pkey))) {
@@ -153,7 +181,7 @@ Data = (function() {
               topic['name'] = tkey;
             }
             topic.items = {};
-            study.topics[tkey] = topic;
+            study.topics[tkey] = batch.Tops[tkey] != null ? batch.Tops[tkey] : topic;
             for (ikey in topic) {
               item = topic[ikey];
               if (!(Util.isChild(ikey))) {
@@ -162,25 +190,21 @@ Data = (function() {
               if (item['name'] == null) {
                 item['name'] = ikey;
               }
+              item.bases = {};
               topic.items[ikey] = item;
+              for (bkey in item) {
+                base = item[bkey];
+                if (!(Util.isChild(bkey))) {
+                  continue;
+                }
+                if (base['name'] == null) {
+                  base['name'] = bkey;
+                }
+                item.bases[bkey] = base;
+              }
             }
           }
         }
-      }
-      return data;
-    }
-
-    static createPacks(data) {
-      var gkey, pack;
-      for (gkey in data) {
-        pack = data[gkey];
-        if (!(Util.isChild(gkey))) {
-          continue;
-        }
-        pack['name'] = gkey;
-        data[gkey] = pack;
-        pack.practices = {};
-        this.createPracs(pack);
       }
       return data;
     }

@@ -4,18 +4,17 @@ class Build
   Build.Keys = { Information:'Info', Knowledge:'Know', Wisdom:'Wise' }
 
   constructor:( @batch ) ->
-    @Muse = @batch.Muse.data
-    @None       = { name:'None' }
-    @Rows       = @toRows(       @Muse.Rows    )
-    @Columns    = @toColumns(    @Muse.Columns )
-    @Planes     = @createPlanes( @Muse.Planes  )
+    @Muse    = @batch.Muse.data
+    @None    = { name:'None' }
+    @Rows    = @toRows(       @Muse.Rows    )
+    @Columns = @toColumns(    @Muse.Columns )
+    @Planes  = @createPlanes( @Muse.Planes  )
     #@logAdjacentPractices()
 
   createPlanes:( planes ) ->
-    for key, obj of @batch when key isnt 'Muse' and key isnt 'Font'
-      planes[key]['practices'] = {}
-      for prac, practice of obj.data
-         planes[key]['practices'][prac] = practice
+    for key, obj of @batch when obj.type isnt 'Spec'
+      planes[key]['practices'] = obj.data[key]
+    # console.log( 'Build.createPlanes()', planes )
     planes
 
   combine:() ->
@@ -65,12 +64,9 @@ class Build
       array.push( obj )
     array
 
-
-  getPractices:(  name ) ->
-    for own key, plane of @Planes
-      return @Planes[key].practices if plane.name is name
-    console.error( 'Build.getPractices(name) unknown plane with', name, 'returning Info practices' )
-    @Planes['Info'].practices
+  getPractices:( name ) ->
+    key = if Build.Keys[name]? then Build.Keys[name] else name
+    @Planes[key].practices
 
   getPractice:( plane, row, column ) ->
     practices = @getPractices( plane )

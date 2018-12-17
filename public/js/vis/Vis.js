@@ -16,7 +16,7 @@ Vis = class Vis {
       sx: sx,
       sy: sy
     });
-    return ` scale( ${sx}, ${sx} )`;
+    return ` scale( ${sx}, ${sy} )`;
   }
 
   static rotate(a, x, y) {

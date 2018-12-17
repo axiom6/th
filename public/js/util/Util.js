@@ -237,7 +237,7 @@ Util = (function() {
 
     // ------ Validators ------
     static isDef(d) {
-      return d != null;
+      return d !== null && typeof d !== 'undefined';
     }
 
     static isNot(d) {
@@ -245,7 +245,7 @@ Util = (function() {
     }
 
     static isStr(s) {
-      return (s != null) && typeof s === "string" && s.length > 0;
+      return Util.isDef(s) && typeof s === "string" && s.length > 0;
     }
 
     static isntStr(s) {
@@ -253,11 +253,11 @@ Util = (function() {
     }
 
     static isNum(n) {
-      return (n != null) && typeof n === "number" && !isNaN(n);
+      return !isNaN(n);
     }
 
     static isObj(o) {
-      return (o != null) && typeof o === "object";
+      return Util.isDef(o) && typeof o === "object";
     }
 
     static isVal(v) {
@@ -277,15 +277,15 @@ Util = (function() {
     }
 
     static isFunc(f) {
-      return (f != null) && typeof f === "function";
+      return Util.isDef(f) && typeof f === "function";
     }
 
     static isArray(a) {
-      return (a != null) && typeof a !== "string" && (a.length != null) && a.length > 0;
+      return Util.isDef(a) && typeof a !== "string" && (a.length != null) && a.length > 0;
     }
 
     static isEvent(e) {
-      return (e != null) && (e.target != null);
+      return Util.isDef(e) && (e.target != null);
     }
 
     static inIndex(a, i) {
@@ -361,7 +361,7 @@ Util = (function() {
       for (key in args) {
         if (!hasProp.call(args, key)) continue;
         arg = args[key];
-        //console.log( "Util.checkTypes(type,args) argument #{key} #{type}", arg )
+        // console.log( "Util.checkTypes isNum() argument #{key} is #{type}", arg, Util.isNum(arg) )
         if (!Util.checkType(type, arg)) {
           console.log(`Util.checkTypes(type,args) argument ${key} is not ${type}`, arg);
           console.trace();
@@ -457,10 +457,10 @@ Util = (function() {
       return id.replace(/[ \.]/g, "");
     }
 
-    static htmlId(name, type = '', ext = '') {
+    static htmlId(name, type = '', ext = '', issueError = true) {
       var id;
       id = Util.getHtmlId(name, type, ext);
-      if (Util.htmlIds[id] != null) {
+      if ((Util.htmlIds[id] != null) && issueError) {
         console.error('Util.htmlId() duplicate html id', id);
       }
       Util.htmlIds[id] = id;

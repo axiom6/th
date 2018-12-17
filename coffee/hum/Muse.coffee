@@ -13,11 +13,12 @@ class Muse
   Data.hosted = "https://ui-48413.firebaseapp.com/"
   @FontUrl    = "webfonts/helvetiker_regular.typeface.json"
   @Batch =
-    Muse: { url:'json/Muse.json', data:null, isPrac:false }
-    Info: { url:'json/Info.json', data:null, isPrac:true  }
-    Know: { url:'json/Know.json', data:null, isPrac:true  }
-    Wise: { url:'json/Wise.json', data:null, isPrac:true  }
-    Font: { url:Muse.FontUrl,     data:null, isPrac:false }
+    Muse: { url:'json/Muse.json', data:null, type:'Spec' }
+    Info: { url:'json/Info.json', data:null, type:'Pack' }
+    Know: { url:'json/Know.json', data:null, type:'Pack' }
+    Wise: { url:'json/Wise.json', data:null, type:'Pack' }
+    Tops: { url:'json/Tops.json', data:null, type:'Spec' }
+    Font: { url:Muse.FontUrl,     data:null, type:'Spec' }
 
   Data.batchRead( Muse.Batch, Muse.init )
 
@@ -28,6 +29,8 @@ class Muse
       return
 
   constructor:( @batch ) ->
+
+    # console.log( @batch.Info.data )
 
     [@screenWidth,@screenHeight,@aspectRatio] = @resizeScreen()
     @ikwElem = document.getElementById('Ikw')
